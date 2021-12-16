@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/./favicon/favicon.ico">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/./favicon/favicon-16x16.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/./favicon/favicon-32x32.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/./favicon/apple-touch-icon.png">
+    
+    
+        <link rel="mask-icon" href="/./favicon/safari-pinned-tab.svg">
+    
+
+
+    <!-- meta -->
+
+
+<title>C语言程序设计基础06-函数 | Walnutの博客</title>
+
+
+    <meta name="keywords" content="C编程, C/C++">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="函数就是一段封装好的，可以重复使用的代码，它使得我们的程序更加模块化，不需要编写大量重复的代码。 模块化程序设计思想模块化程序设计方法： 在处理某个复杂问题时，通常采用逐步分解、分而治之的方法，即将一个复杂的大问题，分解为若干个独立简单的小问题（即模块），分别解决简单的小问题，进而解决复杂的大问题。 模块化程序设计优点:  模块相对独立，功能单一； 减少重复编写程序的工作量； 使程序便于调试和阅读">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言程序设计基础06-函数">
+<meta property="og:url" content="https://yknut.github.io/2021/12/11/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8006-%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="Walnutの博客">
+<meta property="og:description" content="函数就是一段封装好的，可以重复使用的代码，它使得我们的程序更加模块化，不需要编写大量重复的代码。 模块化程序设计思想模块化程序设计方法： 在处理某个复杂问题时，通常采用逐步分解、分而治之的方法，即将一个复杂的大问题，分解为若干个独立简单的小问题（即模块），分别解决简单的小问题，进而解决复杂的大问题。 模块化程序设计优点:  模块相对独立，功能单一； 减少重复编写程序的工作量； 使程序便于调试和阅读">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg">
+<meta property="article:published_time" content="2021-12-10T17:38:28.000Z">
+<meta property="article:modified_time" content="2021-12-10T17:40:52.920Z">
+<meta property="article:author" content="Walnut">
+<meta property="article:tag" content="C编程">
+<meta property="article:tag" content="C&#x2F;C++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism.min.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism-tomorrow.min.css" media="none">
+        
+    
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/line-numbers/prism-line-numbers.min.css" media="none" onload="this.media='all'">
+    
+
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Walnut</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/links/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/links/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        C语言程序设计基础06-函数
+    </h1>
+    <div class="post-title__meta" style="color:#808080">
+        <a href="/archives/2021/12/" class="post-meta__date button">2021-12-11</a>
+        
+    <span class="separate-dot"></span><a href="/categories/C-C-%E7%BC%96%E7%A8%8B/" class="button">C/C++编程</a>
+
+ 
+		
+<span class="post-time">
+  <span class="post-meta-item-icon">
+	<i class="fa fa-keyboard-o"></i>
+	<span class="separate-dot"></span>
+	<span class="post-count">2k字</span>
+  </span>
+</span>
+
+        
+    
+    
+
+
+ 
+
+
+    </div>
+</div>
+
+
+    <aside class="post-side">
+        <div class="post-side__toc">
+            <div class="toc-title">文章目录</div>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="toc-text">模块化程序设计思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9A%E4%B9%89%E5%8F%8A%E8%B0%83%E7%94%A8"><span class="toc-text">函数的定义及调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%87%BD%E6%95%B0"><span class="toc-text">什么是函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">函数的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89"><span class="toc-text">函数定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"><span class="toc-text">函数调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%8E%9F%E5%9E%8B%E5%A3%B0%E6%98%8E"><span class="toc-text">函数原型声明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="toc-text">函数的参数传递</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="toc-text">函数调用的执行过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E5%81%9A%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="toc-text">数组做函数参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%B5%8C%E5%A5%97%E8%B0%83%E7%94%A8%E5%92%8C%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8"><span class="toc-text">函数的嵌套调用和递归调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B5%8C%E5%A5%97%E8%B0%83%E7%94%A8"><span class="toc-text">嵌套调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8"><span class="toc-text">递归调用</span></a></li></ol></li></ol>
+        </div>
+    </aside>
+    <a class="btn-toc button" id="btn-toc" tabindex="0">
+        <svg viewBox="0 0 1024 1024" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M128 256h64V192H128zM320 256h576V192H320zM128 544h64v-64H128zM320 544h576v-64H320zM128 832h64v-64H128zM320 832h576v-64H320z" fill="currentColor"></path>
+        </svg>
+    </a>
+    <div class="toc-menus" id="toc-menus">
+        <div class="toc-title">文章目录</div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="toc-text">模块化程序设计思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9A%E4%B9%89%E5%8F%8A%E8%B0%83%E7%94%A8"><span class="toc-text">函数的定义及调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%87%BD%E6%95%B0"><span class="toc-text">什么是函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">函数的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89"><span class="toc-text">函数定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"><span class="toc-text">函数调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%8E%9F%E5%9E%8B%E5%A3%B0%E6%98%8E"><span class="toc-text">函数原型声明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="toc-text">函数的参数传递</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="toc-text">函数调用的执行过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E5%81%9A%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="toc-text">数组做函数参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%B5%8C%E5%A5%97%E8%B0%83%E7%94%A8%E5%92%8C%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8"><span class="toc-text">函数的嵌套调用和递归调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B5%8C%E5%A5%97%E8%B0%83%E7%94%A8"><span class="toc-text">嵌套调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8"><span class="toc-text">递归调用</span></a></li></ol></li></ol>
+    </div>
+
+
+<article class="post post__with-toc content-card">
+    <div class="post__header">
+    
+        <div class="post-thumbnail lazy" data-bg="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg"></div>
+    
+
+    <div class="post__expire" id="post-expired-notify">
+        <p>
+            本文最后更新于 &lt;span id=&#34;expire-date&#34;&gt;&lt;/span&gt; 天前，文中部分描述可能已经过时。
+        </p>
+    </div>
+    <script>
+        (() => {
+            var update = Date.parse("2021-12-11"),
+                date = new Date(),
+                now = date.getTime(),
+                expire = now - update,
+                expire_days = Math.floor(expire/(24*3600*1000));
+            if (expire_days >= 120) {
+                document.querySelectorAll('#expire-date')[0].innerHTML = expire_days;
+                document.querySelectorAll('#post-expired-notify')[0].style.display = 'block';
+            }
+        })();
+    </script>
+</div>
+    <div class="post__content">
+        <p>函数就是一段封装好的，可以重复使用的代码，它使得我们的程序更加模块化，不需要编写大量重复的代码。</p>
+<h2 id="模块化程序设计思想"><a href="#模块化程序设计思想" class="headerlink" title="模块化程序设计思想"></a>模块化程序设计思想</h2><p><strong>模块化程序设计方法：</strong></p>
+<p>在处理某个复杂问题时，通常采用逐步分解、分而治之的方法，即将一个复杂的大问题，分解为若干个独立简单的小问题（即模块），分别解决简单的小问题，进而解决复杂的大问题。</p>
+<p><strong>模块化程序设计优点:</strong></p>
+<ul>
+<li>模块相对独立，功能单一；</li>
+<li>减少重复编写程序的工作量；</li>
+<li>使程序便于调试和阅读；</li>
+<li>利于团队开发，缩短开发周期。</li>
+</ul>
+<h2 id="函数的定义及调用"><a href="#函数的定义及调用" class="headerlink" title="函数的定义及调用"></a>函数的定义及调用</h2><h3 id="什么是函数"><a href="#什么是函数" class="headerlink" title="什么是函数"></a>什么是函数</h3><ul>
+<li>函数是构成C语言程序的基本模块</li>
+<li>函数是按规定格式书写的能完成特定功能的一段程序；</li>
+<li>函数可以根据需要与调用函数之间进行数据传递；</li>
+<li>函数之间地位平等，可以互相调用也可以自身调用；</li>
+</ul>
+<h3 id="函数的分类"><a href="#函数的分类" class="headerlink" title="函数的分类"></a>函数的分类</h3><ul>
+<li><p>标准库函数（由系统提供）</p>
+<p>库（Library）是编程中的一个基本概念，可以简单地认为它是一系列函数的集合，在磁盘上往往是一个文件夹。C语言自带的库称为标准库（Standard Library），其他公司或个人开发的库称为第三方库（Third-Party Library）。</p>
+</li>
+<li><p>自定义函数</p>
+<p>用户自己编写的函数</p>
+</li>
+</ul>
+<h3 id="函数定义"><a href="#函数定义" class="headerlink" title="函数定义"></a>函数定义</h3><p>一般形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">返回值类型 函数名(形参表说明) &#x2F;*函数首部*&#x2F; 
+&#123; 
+	说明语句 &#x2F;*函数体*&#x2F; 
+	执行语句 
+&#125; <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>说明：</p>
+<ul>
+<li>函数名代表函数的入口地址，最好能反映其代表的功能。</li>
+<li>函数参数用来传递数据，必须分别定义；</li>
+<li>如果有返回值，在函数体中使用 return 语句返回。return出来的数据的类型要和函数定义的返回值类型 一样。</li>
+</ul>
+<h3 id="函数调用"><a href="#函数调用" class="headerlink" title="函数调用"></a>函数调用</h3><ol>
+<li><p>函数语句调用</p>
+<p>一般形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">函数名([实际参数表]);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>通过函数调用语句调用函数，用于调用没有返回值的函数。</p>
+</li>
+<li><p>函数表达式调用方式</p>
+<p>一般形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">变量名&#x3D;函数表达式<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>函数有返回值，函数调用出现在一个赋值表达式中，要求函数带回一个确定的值参加表达式的运算。</p>
+</li>
+</ol>
+<h3 id="函数原型声明"><a href="#函数原型声明" class="headerlink" title="函数原型声明"></a>函数原型声明</h3><p>函数必须<strong>先定义后使用</strong>，就像变量先定义后使用一样。</p>
+<p>当自定义函数被放在了主调函数的后面，就需要在函数调用之前，加上函数的原型声明。</p>
+<p>C编译器自上而下顺序分析程序代码；当遇到函数调用时，需要知道函数的相关信息。</p>
+<p><strong>格式：</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">函数类型 函数名(形参类型 [形参名]);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><strong>函数原型声明的作用：</strong></p>
+<p>通知编译器函数的返回值类型、函数希望接受的参数个数、类型和顺序，为编译器检查函数调用语句是否合理提供依据。</p>
+<p>当被调函数定义在函数之前时，不需要函数声明。</p>
+<h2 id="函数的参数传递"><a href="#函数的参数传递" class="headerlink" title="函数的参数传递"></a>函数的参数传递</h2><p><strong>形式参数：</strong>函数定义时的参数，简称形参。</p>
+<p><strong>实际参数</strong>：函数调用时的参数，简称实参。</p>
+<p>实参与形参数目、类型和顺序应一致，占据不同存储单元。</p>
+<h3 id="函数调用的执行过程"><a href="#函数调用的执行过程" class="headerlink" title="函数调用的执行过程"></a>函数调用的执行过程</h3><ol>
+<li>对实参进行求值（按从右向左的顺序进行)；</li>
+<li>保护函数调用断点现场，将程序流程转向函数入口地址；</li>
+<li>为函数内的形参和局部变量分配内存单元；</li>
+<li>把实参值复制一份传递给形参（单向传值）</li>
+<li>执行函数内的语句序列；</li>
+<li>当执行到return语句或遇到函数结束的<code>&quot;&#125;&quot;</code>，从函数退出，返回到调用函数的地址；</li>
+<li>把函数值带回给主调函数，收回分配给函数内形参和变量的存储单元。</li>
+</ol>
+<p><strong>单向值传递</strong>：</p>
+<ul>
+<li>每个函数都有自己的变量空间，参数也位于这个空间；</li>
+<li>形参调用前不占内存单元，调用时对形参分配存储单元并传递实参的值;</li>
+<li>调用结束后，形参单元被释放，实参单元仍保留并维持原值；</li>
+<li>形参值的变化不会改变主调函数中实参的值。</li>
+</ul>
+<h3 id="数组做函数参数"><a href="#数组做函数参数" class="headerlink" title="数组做函数参数"></a>数组做函数参数</h3><ul>
+<li>由于数组名代表数组在内存中存放区域的首地址，使用数组名作为函数参数，可以实现批量数据的共享,<br>以及数据的同步更新。</li>
+<li>运行时编译器不在为形参数组分配存储空间，实参与形参数组共用一组存储单元。调用时只需复制实参数组的基地址值给形参数组，而无须复制全部需要处理的数据，节约存储空间，提高效率。</li>
+</ul>
+<p><strong>一维数组做函数参数</strong></p>
+<ul>
+<li>实参、形参分别定义数组，名字可以相同，也可以不同；</li>
+<li>调用时参数实现地址传递；</li>
+<li>函数调用时实参用不带下标的数组名，必须有确切值；</li>
+<li>形参数组和实参数组长度可以不相同，在调用时，只传送首地址而不检查形参数组的长度；</li>
+<li>一维数组可以不指定大小；</li>
+<li>对形参数组的修改即是对实参数组的修改，函数无须返回数组。</li>
+</ul>
+<p><strong>实例：</strong></p>
+<p><em>计算n元一维数组的平均值。</em></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token comment">/*平均值函数声明*/</span>
+<span class="token keyword">float</span> <span class="token function">Aver</span><span class="token punctuation">(</span><span class="token keyword">float</span> array<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> i<span class="token punctuation">;</span>
+	<span class="token keyword">float</span> a<span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+	<span class="token punctuation">&#123;</span>
+		<span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%f"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"平均值=%f\n"</span><span class="token punctuation">,</span> <span class="token function">Aver</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/*数组a作为参数*/</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">/*平均值函数*/</span>
+<span class="token keyword">float</span> <span class="token function">Aver</span><span class="token punctuation">(</span><span class="token keyword">float</span> array<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> i<span class="token punctuation">;</span>
+	<span class="token keyword">float</span> sum <span class="token operator">=</span> <span class="token number">0.0</span><span class="token punctuation">;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+	<span class="token punctuation">&#123;</span>
+		sum <span class="token operator">+=</span> array<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">return</span> sum <span class="token operator">/</span> n<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p><strong>二维数组做参数</strong></p>
+<ul>
+<li>函数定义中，形参数组的定义可以省略第一维的大小，但是不能省略第二维的大小，因为必须知道列数才能正确计算一个数组元素在数组中相对于第一个元素的偏移位置。</li>
+<li>函数调用时，向函数传递二维数组的首地址。</li>
+</ul>
+<h2 id="函数的嵌套调用和递归调用"><a href="#函数的嵌套调用和递归调用" class="headerlink" title="函数的嵌套调用和递归调用"></a>函数的嵌套调用和递归调用</h2><h3 id="嵌套调用"><a href="#嵌套调用" class="headerlink" title="嵌套调用"></a>嵌套调用</h3><blockquote>
+<p>嵌套调用：在调用一个函数的过程中，又调用另一个函数。</p>
+</blockquote>
+<p>函数不能嵌套定义，但可以嵌套调用。</p>
+<p>一般形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">void A()
+&#123;
+	...
+&#125;
+void B()
+&#123;
+	...
+	A();  &#x2F;*在B函数调用A函数*&#x2F;
+	...
+&#125;
+
+main()
+&#123;
+	...
+	B();  &#x2F;*调用B函数，也就调用了A函数*&#x2F;
+	...
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="递归调用"><a href="#递归调用" class="headerlink" title="递归调用"></a>递归调用</h3><blockquote>
+<p>递归调用：在调用一个函数的过程中又出现<strong>直接</strong>或<strong>间接</strong>地调用该函数本身，前者称为直接递归，后者称为间接递归。</p>
+</blockquote>
+<p>直接递归：</p>
+<pre class="line-numbers language-none"><code class="language-none">void A()
+&#123;
+	...
+	A();  &#x2F;*调用函数本身*&#x2F;
+	...
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>间接递归：</p>
+<pre class="line-numbers language-none"><code class="language-none">void A()
+&#123;
+	...
+	B();  &#x2F;*调用B函数*&#x2F;
+	...
+&#125;
+void B()
+&#123;
+	...
+	A();  &#x2F;*调用A函数*&#x2F;
+	...
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>递归的优缺点：</strong></p>
+<ul>
+<li><strong>优点：</strong>程序简洁，代码紧凑。</li>
+<li><strong>缺点：</strong>每调用函数一次，在内存堆栈区分配空间，用于存放函数变量、返回值等信息。所以递归次数过多，可能引起堆栈溢出，且时间效率较差。</li>
+</ul>
+<p><strong>注意：</strong></p>
+<ul>
+<li>递归一般有两个步骤：<strong>递推和回归</strong></li>
+<li>递归一定要有<strong>终止条件</strong></li>
+</ul>
+<p>实例：</p>
+<p><em>使用递归计算n!</em> </p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token keyword">long</span> <span class="token function">fact</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">long</span> f<span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>n<span class="token operator">==</span><span class="token number">1</span><span class="token operator">||</span>n<span class="token operator">==</span><span class="token number">0</span><span class="token punctuation">)</span>
+	<span class="token punctuation">&#123;</span>
+		f <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">else</span>
+		f <span class="token operator">=</span> n <span class="token operator">*</span> <span class="token function">fact</span><span class="token punctuation">(</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">return</span> f<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+ 
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> num<span class="token punctuation">;</span>
+	<span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>num<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d!的值为%ld"</span><span class="token punctuation">,</span> num<span class="token punctuation">,</span> <span class="token function">fact</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>Walnut
+        </p>
+        <p>
+            <strong>
+                本文链接：
+            </strong>
+            <a href="https://yknut.github.io/2021/12/11/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8006-%E5%87%BD%E6%95%B0/">https://yknut.github.io/2021/12/11/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8006-%E5%87%BD%E6%95%B0/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新于 2021-12-11</p></div> 
+    <div class="post-entry__tags"><a href="/tags/C%E7%BC%96%E7%A8%8B/" class="post-tags__link button">C编程</a><a href="/tags/C-C/" class="post-tags__link button">C/C++</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2021/12/11/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8007-%E5%8F%98%E9%87%8F%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E7%BC%96%E8%AF%91%E9%A2%84%E5%A4%84%E7%90%86/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            C语言程序设计基础07-变量的作用域和编译预处理
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/12/10/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8005-%E6%95%B0%E7%BB%84/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            C语言程序设计基础05-数组
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">Walnutの博客</a>
+        </p>
+    
+    
+        
+            <p>欢迎来到Walnut的博客(´▽`ʃ♡ƪ)</p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/DioPong/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

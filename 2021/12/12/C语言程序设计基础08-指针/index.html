@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/./favicon/favicon.ico">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/./favicon/favicon-16x16.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/./favicon/favicon-32x32.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/./favicon/apple-touch-icon.png">
+    
+    
+        <link rel="mask-icon" href="/./favicon/safari-pinned-tab.svg">
+    
+
+
+    <!-- meta -->
+
+
+<title>C语言程序设计基础08-指针 | Walnutの博客</title>
+
+
+    <meta name="keywords" content="C编程, C/C++">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="所谓指针，也就是内存的地址；所谓指针变量，也就是保存了内存地址的变量。 指针的定义和使用指针的定义内存和地址：  内存：就是内部存储器，是由存储单元组成的，它是线性连续的。存储单元的最小单位是字节。 内存地址按字节编号，其字长一般与主机相同。32位机使用32位地址，最多支持2^32字节内存(4G)。 CPU 只能通过地址来取得内存中的代码和数据，程序在执行过程中会告知 CPU 要执行的代码以及要读">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言程序设计基础08-指针">
+<meta property="og:url" content="https://yknut.github.io/2021/12/12/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8008-%E6%8C%87%E9%92%88/index.html">
+<meta property="og:site_name" content="Walnutの博客">
+<meta property="og:description" content="所谓指针，也就是内存的地址；所谓指针变量，也就是保存了内存地址的变量。 指针的定义和使用指针的定义内存和地址：  内存：就是内部存储器，是由存储单元组成的，它是线性连续的。存储单元的最小单位是字节。 内存地址按字节编号，其字长一般与主机相同。32位机使用32位地址，最多支持2^32字节内存(4G)。 CPU 只能通过地址来取得内存中的代码和数据，程序在执行过程中会告知 CPU 要执行的代码以及要读">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg">
+<meta property="article:published_time" content="2021-12-12T12:30:15.000Z">
+<meta property="article:modified_time" content="2021-12-12T12:32:50.923Z">
+<meta property="article:author" content="Walnut">
+<meta property="article:tag" content="C编程">
+<meta property="article:tag" content="C&#x2F;C++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism.min.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism-tomorrow.min.css" media="none">
+        
+    
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/line-numbers/prism-line-numbers.min.css" media="none" onload="this.media='all'">
+    
+
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Walnut</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/links/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/links/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        C语言程序设计基础08-指针
+    </h1>
+    <div class="post-title__meta" style="color:#808080">
+        <a href="/archives/2021/12/" class="post-meta__date button">2021-12-12</a>
+        
+    <span class="separate-dot"></span><a href="/categories/C-C-%E7%BC%96%E7%A8%8B/" class="button">C/C++编程</a>
+
+ 
+		
+<span class="post-time">
+  <span class="post-meta-item-icon">
+	<i class="fa fa-keyboard-o"></i>
+	<span class="separate-dot"></span>
+	<span class="post-count">3.7k字</span>
+  </span>
+</span>
+
+        
+    
+    
+
+
+ 
+
+
+    </div>
+</div>
+
+
+    <aside class="post-side">
+        <div class="post-side__toc">
+            <div class="toc-title">文章目录</div>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-text">指针的定义和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-text">指针的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">指针的使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E8%BF%90%E7%AE%97"><span class="toc-text">指针的运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97"><span class="toc-text">指针的算术运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%85%B3%E7%B3%BB%E8%BF%90%E7%AE%97"><span class="toc-text">指针的关系运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8C%E7%B1%BB%E6%8C%87%E9%92%88%E7%9B%B8%E5%87%8F"><span class="toc-text">同类指针相减</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%BF%90%E7%AE%97"><span class="toc-text">强制类型转换运算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E6%95%B0%E7%BB%84"><span class="toc-text">指针和数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">指针和字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E5%87%BD%E6%95%B0"><span class="toc-text">指针和函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E4%BD%9C%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="toc-text">指针变量作函数参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E5%90%8D%E4%BD%9C%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="toc-text">数组名作函数参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E6%8C%87%E9%92%88%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-text">返回指针的函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84"><span class="toc-text">指针数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84"><span class="toc-text">指针和字符串数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88"><span class="toc-text">二级指针</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%90%91%E6%95%B0%E7%BB%84%E7%9A%84%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F"><span class="toc-text">指向数组的指针变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%90%91%E5%87%BD%E6%95%B0%E7%9A%84%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F"><span class="toc-text">指向函数的指针变量</span></a></li></ol>
+        </div>
+    </aside>
+    <a class="btn-toc button" id="btn-toc" tabindex="0">
+        <svg viewBox="0 0 1024 1024" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M128 256h64V192H128zM320 256h576V192H320zM128 544h64v-64H128zM320 544h576v-64H320zM128 832h64v-64H128zM320 832h576v-64H320z" fill="currentColor"></path>
+        </svg>
+    </a>
+    <div class="toc-menus" id="toc-menus">
+        <div class="toc-title">文章目录</div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-text">指针的定义和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-text">指针的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">指针的使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E8%BF%90%E7%AE%97"><span class="toc-text">指针的运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97"><span class="toc-text">指针的算术运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E5%85%B3%E7%B3%BB%E8%BF%90%E7%AE%97"><span class="toc-text">指针的关系运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8C%E7%B1%BB%E6%8C%87%E9%92%88%E7%9B%B8%E5%87%8F"><span class="toc-text">同类指针相减</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%BF%90%E7%AE%97"><span class="toc-text">强制类型转换运算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E6%95%B0%E7%BB%84"><span class="toc-text">指针和数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">指针和字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E5%87%BD%E6%95%B0"><span class="toc-text">指针和函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E4%BD%9C%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="toc-text">指针变量作函数参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E5%90%8D%E4%BD%9C%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="toc-text">数组名作函数参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E6%8C%87%E9%92%88%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-text">返回指针的函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84"><span class="toc-text">指针数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84"><span class="toc-text">指针和字符串数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88"><span class="toc-text">二级指针</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%90%91%E6%95%B0%E7%BB%84%E7%9A%84%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F"><span class="toc-text">指向数组的指针变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%90%91%E5%87%BD%E6%95%B0%E7%9A%84%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F"><span class="toc-text">指向函数的指针变量</span></a></li></ol>
+    </div>
+
+
+<article class="post post__with-toc content-card">
+    <div class="post__header">
+    
+        <div class="post-thumbnail lazy" data-bg="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg"></div>
+    
+
+    <div class="post__expire" id="post-expired-notify">
+        <p>
+            本文最后更新于 &lt;span id=&#34;expire-date&#34;&gt;&lt;/span&gt; 天前，文中部分描述可能已经过时。
+        </p>
+    </div>
+    <script>
+        (() => {
+            var update = Date.parse("2021-12-12"),
+                date = new Date(),
+                now = date.getTime(),
+                expire = now - update,
+                expire_days = Math.floor(expire/(24*3600*1000));
+            if (expire_days >= 120) {
+                document.querySelectorAll('#expire-date')[0].innerHTML = expire_days;
+                document.querySelectorAll('#post-expired-notify')[0].style.display = 'block';
+            }
+        })();
+    </script>
+</div>
+    <div class="post__content">
+        <p>所谓指针，也就是内存的地址；所谓指针变量，也就是保存了内存地址的变量。</p>
+<h2 id="指针的定义和使用"><a href="#指针的定义和使用" class="headerlink" title="指针的定义和使用"></a>指针的定义和使用</h2><h3 id="指针的定义"><a href="#指针的定义" class="headerlink" title="指针的定义"></a>指针的定义</h3><p><strong>内存和地址：</strong></p>
+<ul>
+<li>内存：就是内部存储器，是由存储单元组成的，它是线性连续的。存储单元的最小单位是字节。</li>
+<li>内存地址按字节编号，其字长一般与主机相同。32位机使用32位地址，最多支持2^32字节内存(4G)。</li>
+<li>CPU 只能通过地址来取得内存中的代码和数据，程序在执行过程中会告知 CPU 要执行的代码以及要读写的数据的地址</li>
+</ul>
+<p>变量地址：系统分配给变量的内存单元的起始地址</p>
+<p>变量的寻址方式：</p>
+<ul>
+<li>直接寻址：通过变量名访问变量</li>
+<li>间接寻址：通过指针访问变量</li>
+</ul>
+<blockquote>
+<p><strong>指针：</strong>一个变量的地址。</p>
+<p><strong>指针变量：</strong>用于存放变量的地址（指针）的变量。</p>
+</blockquote>
+<p>利用指针变量实现了对变量的间接访问。</p>
+<p>一般形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">类型说明符 *变量名; 
+
+&#x2F;&#x2F;	*与前面的类型说明符共同说明这是一个指针变量；
+&#x2F;&#x2F;	类型说明符表示该指针变量所指向的变量为何种数据类型；
+&#x2F;&#x2F;	变量名即为定义的指针变量名；<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="指针的使用"><a href="#指针的使用" class="headerlink" title="指针的使用"></a>指针的使用</h3><ul>
+<li><p><strong>取地址运算</strong></p>
+<ul>
+<li><p>一般形式</p>
+<pre class="line-numbers language-none"><code class="language-none">&amp;变量<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>例如</p>
+<pre class="line-numbers language-none"><code class="language-none">int a,*p,*q;
+p&#x3D;&amp;a;	&#x2F;&#x2F;将a的地址赋值给指针p,也就是p指向a
+q&#x3D;p;	&#x2F;&#x2F;p和q都存储a的地址，都指向a<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+</li>
+<li><p><strong>取内容运算</strong></p>
+<ul>
+<li><p>一般形式</p>
+<pre class="line-numbers language-none"><code class="language-none">*指针表达式<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>若*p出现在赋值号左边，表示给p所指变量赋值；</p>
+<p>若*p不出现在赋值号左边，表示p所指变量的值</p>
+</li>
+<li><p>例如</p>
+<pre class="line-numbers language-none"><code class="language-none">int a,*p,*q;
+p&#x3D;&amp;a;	&#x2F;&#x2F;p指向a
+*p&#x3D;10;	&#x2F;&#x2F;把10赋值给a
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+</li>
+</ul>
+<p><strong>为指针变量赋初值</strong></p>
+<ul>
+<li><p>定义指针变量并初始化</p>
+<pre class="line-numbers language-none"><code class="language-none">类型说明符 *变量名&#x3D;常量;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>使用赋值语句赋值</p>
+<pre class="line-numbers language-none"><code class="language-none">类型说明符 *变量名;
+变量名&#x3D;常量;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li><p>为指针赋空值(NULL)</p>
+<p>此时指针不指向任何变量，NULL是在stdio.h中定义的符号常数 <code>#define NULL 0</code></p>
+<pre class="line-numbers language-none"><code class="language-none">指针变量&#x3D;NULL;  &#x2F;&#x2F;不提倡赋值0或者&#39;\0&#39;
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ul>
+<h2 id="指针的运算"><a href="#指针的运算" class="headerlink" title="指针的运算"></a>指针的运算</h2><h3 id="指针的算术运算"><a href="#指针的算术运算" class="headerlink" title="指针的算术运算"></a>指针的算术运算</h3><p><strong>指针表达式和常量的加减运算</strong></p>
+<ul>
+<li><p>一般形式：    </p>
+<pre class="line-numbers language-none"><code class="language-none">p+n或者p-n
+其中，p是任意一个指针表达式，n是任何一种整型表达式。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li><p>计算规则</p>
+<p>表达式p+n 的值=p的值 + p所指类型长度*n</p>
+<p>表达式p-n 的值=p的值 - p所指类型长度*n</p>
+</li>
+<li><p>说明：</p>
+<p>只有当p和p+n或p-n都指向连续存放的同类型数据区域（数组）时，指针加、减才有实际意义。</p>
+</li>
+</ul>
+<p><strong>指针自增自减运算</strong></p>
+<ul>
+<li><p>形式：</p>
+<ul>
+<li>前缀：<code>++p; --p;</code></li>
+<li>后缀：<code>p++; p--;</code></li>
+</ul>
+</li>
+<li><p>功能：</p>
+<ul>
+<li><p>进行++p或p++运算后都使p指向下一个数据；</p>
+</li>
+<li><p>表达式p++的值等于p的<strong>原来值</strong>；</p>
+<p>表达式++p的值等于p的<strong>新值</strong>；</p>
+</li>
+</ul>
+</li>
+<li><p>说明：</p>
+<p>取内容运算符”*”、取地址运算符”&amp;”和自增自减运算符都是单目运算符，<font color=brown><strong>运算的优先级相同</strong></font>，结合方向都是<font color=brown><strong>自右至左</strong>。</font></p>
+</li>
+</ul>
+<p><em>关于 *和 &amp;的运算：</em></p>
+<pre class="line-numbers language-none"><code class="language-none">假设有一个 int 类型的变量 a，指针p指向a
+则：
+
+1.	*&amp;a可以理解为*(&amp;a)，&amp;a表示取变量 a 的地址（等价于 p），*(&amp;a)表示取这个地址上的数据（等价于 *p），	所以*&amp;a等价于 a。
+2.	&amp;*p可以理解为&amp;(*p)，*p表示取得 p 指向的数据（等价于 a），&amp;(*p)表示数据的地址（等价于 &amp;a），	    	所以&amp;*p等价于 p。
+总之，*和&amp;运算的优先级相同，自右向左运算。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="指针的关系运算"><a href="#指针的关系运算" class="headerlink" title="指针的关系运算"></a>指针的关系运算</h3><p>当两个指针指向同一个数组中的元素时，才能进行&gt;、&lt;、&gt;=、&lt;=、!=、==的关系运算。</p>
+<p>任何指针p与NULL进行<code>&quot;p==NULL&quot;</code>或<code>&quot;p!=NULL&quot;</code>运算均有意义：判断指针p是否指向空。</p>
+<p>指针的关系运算只有同类指针进行比较才有意义。</p>
+<p>语法：<code>指针表达式 关系运算符 指针表达式</code></p>
+<ul>
+<li>==和!=运算符，比较两个指针表达式是否指向同一个内存单元;</li>
+<li>&lt;、&lt;=、&gt;、&gt;=，比较两个指针所指内存区域的先后次序。</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">p&gt;q: p指针所指元素位于q所指元素之后时为1,反之为0。
+p&#x3D;&#x3D;q: 两指针指向同一元素时为1，反之为0。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="同类指针相减"><a href="#同类指针相减" class="headerlink" title="同类指针相减"></a>同类指针相减</h3><p>语法：<code>p-q</code></p>
+<p>说明：</p>
+<ol>
+<li>同类指针相减时，两个指针应该指向连续存放的同类数据区域。</li>
+<li>p-q的值，等于(p的值-q的值)/所指类型长度, 即<strong>p, q两个指针之间数据元素的个数</strong>。</li>
+</ol>
+<h3 id="强制类型转换运算"><a href="#强制类型转换运算" class="headerlink" title="强制类型转换运算"></a>强制类型转换运算</h3><p>格式：<code>(类型名*)指针表达式</code></p>
+<p>功能：将指针表达式的值转换成指定类型的指针。</p>
+<h2 id="指针和数组"><a href="#指针和数组" class="headerlink" title="指针和数组"></a>指针和数组</h2><p>数组中的每个元素都可以通过下标唯一确定，即通过下标可以访问(操作)数组中的元素。</p>
+<p>在C语言中，凡是可以通过数组下标方式完成的访问(操作)均可以通过指针方式实现。</p>
+<p>数组名就是数组的首地址常量，就是第 0 号元素的地址。</p>
+<p>例如：</p>
+<pre class="line-numbers language-none"><code class="language-none">int a[10],*p;
+p&#x3D;a; &#x2F;*等价于p&#x3D;&amp;a[0]*&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>访问数组：</strong></p>
+<ul>
+<li><p><strong>下标方式</strong></p>
+<p>用 a[i] 形式访问数组元素</p>
+</li>
+<li><p><strong>指针访问</strong></p>
+<ul>
+<li><p>通过指向数组元素的指针变量访问所需元素。</p>
+<pre class="line-numbers language-none"><code class="language-none">int a[10],*p;
+p&#x3D;a; &#x2F;*等价于p&#x3D;&amp;a[0]*&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>p指向a数组的第1个元素a[0]，则*p等于a[0]</p>
+<p>p+i指向a数组的第i个元素a[i]，则*(p+i)等于a[i]</p>
+</li>
+<li><p>例如：</p>
+<p><em>使用指针遍历数组</em></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> a<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">*</span>p<span class="token punctuation">;</span> 
+	p <span class="token operator">=</span> a<span class="token punctuation">;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">,</span> p<span class="token operator">++</span><span class="token punctuation">)</span>
+	<span class="token punctuation">&#123;</span>
+		<span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> p<span class="token punctuation">)</span><span class="token punctuation">;</span>	
+	<span class="token punctuation">&#125;</span>
+	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span>p<span class="token operator">=</span>a<span class="token punctuation">;</span>p<span class="token operator">&lt;</span><span class="token punctuation">(</span>a<span class="token operator">+</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>p<span class="token operator">++</span><span class="token punctuation">)</span>
+	<span class="token punctuation">&#123;</span>
+		<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%-3d"</span><span class="token punctuation">,</span> <span class="token operator">*</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+</li>
+</ul>
+<p><em>关于数组指针：</em></p>
+<pre class="line-numbers language-none"><code class="language-none">1.	*p++ 等价于 *(p++)，表示先取得第 n 个元素的值，再将 p 指向下一个元素
+2.	*++p 等价于 *(++p)，会先进行 ++p 运算，使得 p 的值增加，指向下一个元素，整体上相当于 *(p+1)，所以	  会获得第 n+1 个数组元素的值。
+3.	(*p)++ 就非常简单了，会先取得第 n 个元素的值，再对该元素的值加 1。假设 p 指向第 0 个元素，并且第     	0 个元素的值为 99，执行完该语句后，第 0 个元素的值就会变为 100。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p><strong><font color=brown>数组与指针的本质区别：</font></strong></p>
+<ul>
+<li>数组名是<strong>指针常量</strong>，不能改变指针常量的值，a++;a+=2;a=p;都是非法的。</li>
+<li>指针p是<strong>变量</strong>，若p指向数组的首地址，p+1代表该类型的下一变量的地址。</li>
+</ul>
+<h2 id="指针和字符串"><a href="#指针和字符串" class="headerlink" title="指针和字符串"></a>指针和字符串</h2><p>除了之前指针的初始化方法，还可以用字符串常量对字符指针进行初始化</p>
+<pre class="line-numbers language-none"><code class="language-none">char *str &#x3D; &quot;I love China&quot;;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>此时,字符指针指向一个字符串常量的首地址。</p>
+<p>字符串中每个字符的类型都是<code>char</code>，所以 字符指针的类型也必须是<code>char *</code>。</p>
+<p> <strong>字符指针和字符数组的区别：</strong></p>
+<ul>
+<li><p>在内存中，字符数组存储在全局数据区或栈区，指针实现的字符串存储在常量区。全局数据区和栈区的字符串（也包括其他数据）有读取和写入的权限，而常量区的字符串（也包括其他数据）只有读取权限，没有写入权限。</p>
+</li>
+<li><p>字符数组由若干个元素组成，每个元素中放一个字符，而字符指针变量中存放的是字符串的首地址。</p>
+<p>字符指针的赋值方式有三种：</p>
+<pre class="line-numbers language-none"><code class="language-none">1.	char *str&#x3D;&quot;I love China&quot;;
+2.	char *p;
+	p&#x3D;&quot;I love China&quot;;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>字符指针 str 是个变量,可以改变 str 使它指向不同的字符串, 但不能改变 str 所指向的字符串常量的值。 </p>
+<p>如果需要修改字符串的内容需要借助字符数组</p>
+<pre class="line-numbers language-none"><code class="language-none">3.	char str[],*p&#x3D;str;
+	gets(str);&#x2F;&#x2F;或者scanf(&quot;%s&quot;,p);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+</ul>
+<h2 id="指针和函数"><a href="#指针和函数" class="headerlink" title="指针和函数"></a>指针和函数</h2><h3 id="指针变量作函数参数"><a href="#指针变量作函数参数" class="headerlink" title="指针变量作函数参数"></a>指针变量作函数参数</h3><p>函数的参数不仅可以是整型、实型、字符型，还可以是指针型</p>
+<p>它的作用是将一个变量的地址传送到另外一个函数中。</p>
+<p>示例：</p>
+<p><em>交换两个变量的值</em></p>
+<pre class="line-numbers language-none"><code class="language-none">#include &lt;stdio.h&gt;
+void swap(int x, int y)&#123;
+    int temp; 
+    temp &#x3D; x;
+    x &#x3D; y;
+    y &#x3D; temp;
+&#125;
+int main()&#123;
+    int x &#x3D; 10, y &#x3D; 20;
+    swap(x, y);
+    printf(&quot;x &#x3D; %d, y &#x3D; %d\n&quot;, x, y);
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>输出结果：<code>x = 10, y = 20</code></p>
+<p>在swap函数中，x和y的值是互换了，但main函数中，a, b的值并未互换。</p>
+<pre class="line-numbers language-none"><code class="language-none">#include &lt;stdio.h&gt;
+void swap(int *x, int *y)&#123;
+    int *temp; 
+    temp &#x3D; x;
+    x &#x3D; y;
+    y &#x3D; temp;
+&#125;
+int main()&#123;
+    int x &#x3D; 10, y &#x3D; 20;
+	int *px &#x3D; &amp;x;
+	int *py &#x3D; &amp;y;
+	swap(px, py);
+	printf(&quot;x &#x3D; %d, y &#x3D; %d\n&quot;, *px, *py);
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>输出结果：<code>x = 10, y = 20</code></p>
+<p>通过改变指针形参的值，也不能改变指针实参的值。</p>
+<pre class="line-numbers language-none"><code class="language-none">#include &lt;stdio.h&gt;
+void swap(int *px, int *py)&#123;  
+    int temp; 
+    temp &#x3D; *px;	
+    *px &#x3D; *py;
+    *py &#x3D; temp;	&#x2F;*交换指针所指向的变量的值*&#x2F;
+&#125;
+int main()&#123;
+    int x &#x3D; 10, y &#x3D; 20;
+	swap(&amp;x, &amp;y);
+	printf(&quot;x &#x3D; %d, y &#x3D; %d\n&quot;, x, y);
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>输出结果：<code>x = 20, y = 10</code></p>
+<p>被调用函数不能改变实参指针变量的值，但可以改变实参指针变量所指向的变量的值。</p>
+<h3 id="数组名作函数参数"><a href="#数组名作函数参数" class="headerlink" title="数组名作函数参数"></a>数组名作函数参数</h3><p>当用数组名作为参数时，如果形参数组中元素的值发生变化，实参数组元素的值也随之变化。</p>
+<p>若有一个实参数组，想在函数中改变此数组的元素的值，有四种情况：</p>
+<ul>
+<li>形参与实参都用数组名</li>
+<li>实参用数组名，形参用指针变量</li>
+<li>实参形参均用指针变量</li>
+<li>实参为指针变量，形参为数组名</li>
+</ul>
+<p>都是地址传递，只是形式不同。</p>
+<p><strong>注意：</strong></p>
+<ul>
+<li><p>指针变量在作实参时，必须有确定的值，即指向一个已定义的单元。</p>
+<pre class="line-numbers language-none"><code class="language-none">int *p;
+fun(p);	&#x2F;&#x2F;错误！
+
+int *p,a[10];
+p&#x3D;a;
+fun(p);	&#x2F;&#x2F;正确！<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<h3 id="返回指针的函数"><a href="#返回指针的函数" class="headerlink" title="返回指针的函数"></a>返回指针的函数</h3><p>定义形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">类型说明符 *函数名([形式参数表])
+&#123;
+	&#x2F;&#x2F;语句块
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>该函数的返回值是一个指针，其他和一般函数相同</p>
+<h2 id="指针数组"><a href="#指针数组" class="headerlink" title="指针数组"></a>指针数组</h2><p>指针数组：数组中的元素均为指针类型。</p>
+<ul>
+<li><p>定义形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">数据类型 * 数组名[常量表达式]
+例如： int *pa[10];<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><code>[]</code> 比<code>*</code>优先级高，因此pa先与[10]结合，形成pa[10]，具有10个元素。然后再与<code>*</code>结合，表示此数组中每一个元素是指针型的。</p>
+</li>
+<li><p>功能：</p>
+<p>定义一个由10个指针变量构成的指针数组，数组中的每个数组元素都是一个指向一个整数的指针变量。</p>
+</li>
+<li><p>初始化：</p>
+<p>必须使用地址值为指针数组初始化</p>
+</li>
+</ul>
+<h2 id="指针和字符串数组"><a href="#指针和字符串数组" class="headerlink" title="指针和字符串数组"></a>指针和字符串数组</h2><p>字符串数组：数组中的每个元素都是存放字符的数组；字符串数组的每一行可存放一个字符串。</p>
+<p>给字符串数组赋初值：</p>
+<ul>
+<li><p>直接给字符串数组赋初值</p>
+<pre class="line-numbers language-none"><code class="language-none">char str[3][12]&#x3D;&#123;&quot;hello&quot;,&quot;I love China&quot;,&quot;!&quot;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>由于字符串长短不一，定义时应考虑最长的串和结束标志的位置。防止造成内存单元浪费。</p>
+</li>
+<li><p>用指针数组处理多个字符串</p>
+<pre class="line-numbers language-none"><code class="language-none">char *str[]&#x3D;&#123;&quot;hello&quot;,&quot;I love China&quot;,&quot;!&quot;&#125; &#x2F;&#x2F;[]内的元素数值可以省略不写<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>此时，<font color=brown>数组中的每个元素都存放着对应的一个字符串的首地址</font>。各字符串依次存入各相应的首地址开始的连续存储单元中。</p>
+<p>使用指针数组可以大大节省内存空间。</p>
+</li>
+</ul>
+<p>注意：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token operator">*</span>p<span class="token punctuation">;</span> 		p为指向整型数据的指针变量<span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token operator">*</span>p<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>		定义指针数组p，它由N个指向整数的指针元素组成<span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token punctuation">(</span><span class="token operator">*</span>p<span class="token punctuation">)</span><span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>	定义指向含N个元素的一维数组的指针变量p<span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token operator">*</span><span class="token function">p</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>		p为带回一个指针的函数，该指针指向整型数据<span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token punctuation">(</span><span class="token operator">*</span>p<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>		p为指向函数的指针，该函数返回一个整型值<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="二级指针"><a href="#二级指针" class="headerlink" title="二级指针"></a>二级指针</h2><p>如果一个指针指向的是另外一个指针，我们就称它为<strong>二级指针</strong>，或者<strong>指向指针的指针</strong>。</p>
+<p>例如：</p>
+<pre class="line-numbers language-none"><code class="language-none">int a &#x3D;10;
+int *p1 &#x3D; &amp;a;
+int **p2 &#x3D; &amp;p1;
+&#x2F;&#x2F;此时，a&#x3D;&#x3D;*p1&#x3D;&#x3D;**p2&#x3D;&#x3D;10<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>指针变量也是一种变量，也会占用存储空间，也可以使用&amp;获取它的地址。</p>
+<p>C语言不限制指针的级数，每增加一级指针，在定义指针变量时就得增加一个星号<code>*</code>。</p>
+<h2 id="指向数组的指针变量"><a href="#指向数组的指针变量" class="headerlink" title="指向数组的指针变量"></a>指向数组的指针变量</h2><p>一般形式：<code>类型说明符 (*变量名)[正整型常量表达式];</code></p>
+<p>定义一个名为“变量名”的指针变量，这个指针变量所指的对象是一个有“正整型常量表达式”个元素的一维数组(建立一个与二维数组名一样的行指针)</p>
+<p>例如：</p>
+<pre class="line-numbers language-none"><code class="language-none">int a[3][4];
+int (*p)[4]&#x3D;a;
+定义p是一个指针变量，它指向包含4个整型元素的一维数组。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>需要使用二维数组给指针赋初值。</p>
+<p>第i行j列元素的地址为：<code>*(p+i)+j</code></p>
+<p>第i行j列元素的值为：<code>*(*(p+i)+j)</code></p>
+<h2 id="指向函数的指针变量"><a href="#指向函数的指针变量" class="headerlink" title="指向函数的指针变量"></a>指向函数的指针变量</h2><p>一个函数总是占用一段连续的内存区域，函数名在表达式中有时也会被转换为该函数所在内存区域的首地址，这和数组名非常类似。我们可以<strong>把函数的这个首地址（或称入口地址）赋予一个指针变量</strong>，使指针变量指向函数所在的内存区域，然后通过指针变量就可以找到并调用该函数。这种指针就是函数指针。</p>
+<p>定义形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">类型说明符 (*函数名)([形式参数表])<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>()</code>的优先级高于<code>*</code>，所以<code>(*函数名)</code>的括号不能省略，否则就变成返回值为指针的函数</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>Walnut
+        </p>
+        <p>
+            <strong>
+                本文链接：
+            </strong>
+            <a href="https://yknut.github.io/2021/12/12/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8008-%E6%8C%87%E9%92%88/">https://yknut.github.io/2021/12/12/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8008-%E6%8C%87%E9%92%88/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新于 2021-12-12</p></div> 
+    <div class="post-entry__tags"><a href="/tags/C%E7%BC%96%E7%A8%8B/" class="post-tags__link button">C编程</a><a href="/tags/C-C/" class="post-tags__link button">C/C++</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/12/11/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8007-%E5%8F%98%E9%87%8F%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E7%BC%96%E8%AF%91%E9%A2%84%E5%A4%84%E7%90%86/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            C语言程序设计基础07-变量的作用域和编译预处理
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">Walnutの博客</a>
+        </p>
+    
+    
+        
+            <p>欢迎来到Walnut的博客(´▽`ʃ♡ƪ)</p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/DioPong/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

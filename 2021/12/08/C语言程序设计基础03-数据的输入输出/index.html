@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/./favicon/favicon.ico">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/./favicon/favicon-16x16.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/./favicon/favicon-32x32.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/./favicon/apple-touch-icon.png">
+    
+    
+        <link rel="mask-icon" href="/./favicon/safari-pinned-tab.svg">
+    
+
+
+    <!-- meta -->
+
+
+<title>C语言程序设计基础03-数据的输入输出 | Walnutの博客</title>
+
+
+    <meta name="keywords" content="C编程, C/C++">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="输入输出（Input and Output, IO）是用户和程序“交流”的过程。在控制台程序中，输出一般是指将数据（包括数字、字符等）显示在屏幕上，输入一般是指获取用户在键盘上输入的数据。 数据的格式化输出 输出：从计算机向显示器、打印机等外部设备输出数据。 输入：从标准输入设备键盘、鼠标等向计算机输入数据。  格式输出函数printf 格式：printf(“格式控制字符串”,输出表项);  常用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言程序设计基础03-数据的输入输出">
+<meta property="og:url" content="https://yknut.github.io/2021/12/08/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8003-%E6%95%B0%E6%8D%AE%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/index.html">
+<meta property="og:site_name" content="Walnutの博客">
+<meta property="og:description" content="输入输出（Input and Output, IO）是用户和程序“交流”的过程。在控制台程序中，输出一般是指将数据（包括数字、字符等）显示在屏幕上，输入一般是指获取用户在键盘上输入的数据。 数据的格式化输出 输出：从计算机向显示器、打印机等外部设备输出数据。 输入：从标准输入设备键盘、鼠标等向计算机输入数据。  格式输出函数printf 格式：printf(“格式控制字符串”,输出表项);  常用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg">
+<meta property="article:published_time" content="2021-12-08T14:07:59.000Z">
+<meta property="article:modified_time" content="2021-12-08T15:38:07.527Z">
+<meta property="article:author" content="Walnut">
+<meta property="article:tag" content="C编程">
+<meta property="article:tag" content="C&#x2F;C++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism.min.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism-tomorrow.min.css" media="none">
+        
+    
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/line-numbers/prism-line-numbers.min.css" media="none" onload="this.media='all'">
+    
+
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Walnut</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/links/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/links/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        C语言程序设计基础03-数据的输入输出
+    </h1>
+    <div class="post-title__meta" style="color:#808080">
+        <a href="/archives/2021/12/" class="post-meta__date button">2021-12-08</a>
+        
+    <span class="separate-dot"></span><a href="/categories/C-C-%E7%BC%96%E7%A8%8B/" class="button">C/C++编程</a>
+
+ 
+		
+<span class="post-time">
+  <span class="post-meta-item-icon">
+	<i class="fa fa-keyboard-o"></i>
+	<span class="separate-dot"></span>
+	<span class="post-count">1.3k字</span>
+  </span>
+</span>
+
+        
+    
+    
+
+
+ 
+
+
+    </div>
+</div>
+
+
+    <aside class="post-side">
+        <div class="post-side__toc">
+            <div class="toc-title">文章目录</div>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA"><span class="toc-text">数据的格式化输出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E8%BE%93%E5%87%BA%E5%87%BD%E6%95%B0printf"><span class="toc-text">格式输出函数printf</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BA%A4%E4%BA%92%E5%BC%8F%E8%BE%93%E5%85%A5"><span class="toc-text">数据的交互式输入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E5%87%BD%E6%95%B0scanf"><span class="toc-text">输入函数scanf</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA"><span class="toc-text">字符输入输出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E8%BE%93%E5%85%A5%E5%87%BD%E6%95%B0getchar"><span class="toc-text">字符输入函数getchar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E8%BE%93%E5%87%BA%E5%87%BD%E6%95%B0putchar"><span class="toc-text">字符输出函数putchar</span></a></li></ol></li></ol>
+        </div>
+    </aside>
+    <a class="btn-toc button" id="btn-toc" tabindex="0">
+        <svg viewBox="0 0 1024 1024" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M128 256h64V192H128zM320 256h576V192H320zM128 544h64v-64H128zM320 544h576v-64H320zM128 832h64v-64H128zM320 832h576v-64H320z" fill="currentColor"></path>
+        </svg>
+    </a>
+    <div class="toc-menus" id="toc-menus">
+        <div class="toc-title">文章目录</div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA"><span class="toc-text">数据的格式化输出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E8%BE%93%E5%87%BA%E5%87%BD%E6%95%B0printf"><span class="toc-text">格式输出函数printf</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BA%A4%E4%BA%92%E5%BC%8F%E8%BE%93%E5%85%A5"><span class="toc-text">数据的交互式输入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E5%87%BD%E6%95%B0scanf"><span class="toc-text">输入函数scanf</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA"><span class="toc-text">字符输入输出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E8%BE%93%E5%85%A5%E5%87%BD%E6%95%B0getchar"><span class="toc-text">字符输入函数getchar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E8%BE%93%E5%87%BA%E5%87%BD%E6%95%B0putchar"><span class="toc-text">字符输出函数putchar</span></a></li></ol></li></ol>
+    </div>
+
+
+<article class="post post__with-toc content-card">
+    <div class="post__header">
+    
+        <div class="post-thumbnail lazy" data-bg="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg"></div>
+    
+
+    <div class="post__expire" id="post-expired-notify">
+        <p>
+            本文最后更新于 &lt;span id=&#34;expire-date&#34;&gt;&lt;/span&gt; 天前，文中部分描述可能已经过时。
+        </p>
+    </div>
+    <script>
+        (() => {
+            var update = Date.parse("2021-12-08"),
+                date = new Date(),
+                now = date.getTime(),
+                expire = now - update,
+                expire_days = Math.floor(expire/(24*3600*1000));
+            if (expire_days >= 120) {
+                document.querySelectorAll('#expire-date')[0].innerHTML = expire_days;
+                document.querySelectorAll('#post-expired-notify')[0].style.display = 'block';
+            }
+        })();
+    </script>
+</div>
+    <div class="post__content">
+        <p>输入输出（Input and Output, IO）是用户和程序“交流”的过程。在控制台程序中，输出一般是指将数据（包括数字、字符等）显示在屏幕上，输入一般是指获取用户在键盘上输入的数据。</p>
+<h2 id="数据的格式化输出"><a href="#数据的格式化输出" class="headerlink" title="数据的格式化输出"></a>数据的格式化输出</h2><blockquote>
+<p>输出：从计算机向显示器、打印机等外部设备输出数据。</p>
+<p>输入：从标准输入设备键盘、鼠标等向计算机输入数据。</p>
+</blockquote>
+<h3 id="格式输出函数printf"><a href="#格式输出函数printf" class="headerlink" title="格式输出函数printf"></a>格式输出函数printf</h3><blockquote>
+<p>格式：printf(“格式控制字符串”,输出表项);</p>
+</blockquote>
+<p><strong>常用的格式控制符：</strong></p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>d , i</td>
+<td>以十进制形式输出有符号整数(正数不输出符号)</td>
+</tr>
+<tr>
+<td>o</td>
+<td>以八进制形式输出无符号整数(不输出前缀0)</td>
+</tr>
+<tr>
+<td>x</td>
+<td>以十六进制形式输出无符号整数(不输出前缀0x)</td>
+</tr>
+<tr>
+<td>u</td>
+<td>以十进制形式输出无符号整数</td>
+</tr>
+<tr>
+<td>f</td>
+<td>以小数形式输出单、双精度类型实数</td>
+</tr>
+<tr>
+<td>e</td>
+<td>以指数形式输出单、双精度实数</td>
+</tr>
+<tr>
+<td>g</td>
+<td>以%f或%e中较短输出宽度的一种格式输出单、双精度实数</td>
+</tr>
+<tr>
+<td>c</td>
+<td>输出单个字符</td>
+</tr>
+<tr>
+<td>s</td>
+<td>输出字符串</td>
+</tr>
+</tbody></table>
+<p><strong>printf()的格式修饰符：</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">一般格式：%[-][m][.][n][l]格式符<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-</td>
+<td>当数据的宽度小于显示宽度时，数据左对齐，右方补空格</td>
+</tr>
+<tr>
+<td>m</td>
+<td>输出数据占m个字符位，若实际数据的宽度大于m，按实际输出;实际数据的宽度小于m ，数据右对齐，左边填空格</td>
+</tr>
+<tr>
+<td>n</td>
+<td>输出数据有n位小数</td>
+</tr>
+<tr>
+<td>m.n</td>
+<td>输出数据占m列，n位小数</td>
+</tr>
+<tr>
+<td>l</td>
+<td>用于常整型或双精度型数据</td>
+</tr>
+<tr>
+<td>%</td>
+<td>%%用于输出字符%</td>
+</tr>
+</tbody></table>
+<p>printf()的返回值：</p>
+<p>printf函数的返回值是返回所打印的字符的数目。</p>
+<h2 id="数据的交互式输入"><a href="#数据的交互式输入" class="headerlink" title="数据的交互式输入"></a>数据的交互式输入</h2><h3 id="输入函数scanf"><a href="#输入函数scanf" class="headerlink" title="输入函数scanf"></a>输入函数scanf</h3><blockquote>
+<p>格式：scanf(“格式控制字符串”，输入项地址列表);</p>
+<p>//“格式控制字符串“用来指出输入的格式，由“%”和格式符以及普通字符组成。<br>//”地址列表“由若干个地址组成，可以是变量地址或者字符串首地址</p>
+</blockquote>
+<p><strong>格式控制符：</strong></p>
+<p>scanf()函数所用的格式控制符与printf()所用的几乎完全相同。主要区别在于printf()把%f、%e、%E、%g、%G同时用于float类型和double类型，而scanf()只是把他们用于float类型，而用于double类型时要求使用l(字母l)修饰符。</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%c</td>
+<td>把输入解释成一个字符</td>
+</tr>
+<tr>
+<td>%d</td>
+<td>把输入解释成一个有符号十进制整数</td>
+</tr>
+<tr>
+<td>%e,%f,%g,%a</td>
+<td>把输入解释成一个浮点数(%a是C99的标准)</td>
+</tr>
+<tr>
+<td>%E,%F,%G,%A</td>
+<td>把输入解释成一个浮点数(%A是C99的标准)</td>
+</tr>
+<tr>
+<td>%i</td>
+<td>把输入解释成一个有符号十进制整数</td>
+</tr>
+<tr>
+<td>%o</td>
+<td>把输入解释成一个有符号的八进制整数</td>
+</tr>
+<tr>
+<td>%p</td>
+<td>把输入解释成一个指针(一个地址)</td>
+</tr>
+<tr>
+<td>%s</td>
+<td>把输入解释成一个字符串：输入的内容以第一个非空白字符作为开始，并且包含直到下一个空白字符的全部字符</td>
+</tr>
+<tr>
+<td>%u</td>
+<td>把输入解释成一个无符号十进制整数</td>
+</tr>
+<tr>
+<td>%x,%X</td>
+<td>把输入解释称一个有符号十六进制整数</td>
+</tr>
+</tbody></table>
+<p><strong>格式修饰符：</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">一般格式：%[m][l][L][h]格式符<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>m</td>
+<td>指定输入数据的位宽</td>
+</tr>
+<tr>
+<td>l</td>
+<td>加在d、u格式前表示输入long型数据<br>加在f、e格式前表示输入double型数据</td>
+</tr>
+<tr>
+<td>L</td>
+<td>加在f、e格式前表示输入long double型数据</td>
+</tr>
+<tr>
+<td>h</td>
+<td>加在d格式前表示输入short型数据</td>
+</tr>
+</tbody></table>
+<p><strong>scanf()的返回值：</strong></p>
+<p>scanf() 函数返回成功读入的项目的个数。如果它没有读取任何项目(比如它期望接收一个数字而您却输入的一个非数字字符时就会发生这种情况),scanf()返回0。 </p>
+<p><font color=brown >在scanf函数的格式控制字符串中尽量不要写入普通字符提示信息。</font></p>
+<blockquote>
+<p>注意：</p>
+<ul>
+<li>采用正确的格式输入数据,是程序运行正确的基础。</li>
+<li>输入时不允许指定数据的精度。</li>
+<li>输入时不允许加“\n”。</li>
+<li>不能使用中文的标点符号。</li>
+</ul>
+</blockquote>
+<h2 id="字符输入输出"><a href="#字符输入输出" class="headerlink" title="字符输入输出"></a>字符输入输出</h2><h3 id="字符输入函数getchar"><a href="#字符输入函数getchar" class="headerlink" title="字符输入函数getchar"></a>字符输入函数getchar</h3><blockquote>
+<p>功能：接收用户从键盘上输入的一个字符</p>
+<p>getchar会以返回值的形式返回接收到的字符</p>
+</blockquote>
+<pre class="line-numbers language-none"><code class="language-none">char c;  &#x2F;*定义字符变量c*&#x2F;
+c&#x3D;getchar(); &#x2F;*将读取的字符赋值给字符变量c*&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><font color=brown ><strong>使用多次getchar()注意：</strong>输入的数据放在输入行缓冲区，直到键入回车符或文件结束符EOF 时，才认为输入结束，getchar())才开始从输入缓冲队列读取字符。前面函数没读走的数据仍在缓冲队列中，将被下一个函数读取。</font></p>
+<p><strong>解决：</strong>输入间插入一个getchar()</p>
+<pre class="line-numbers language-none"><code class="language-none">a&#x3D;getchar();&#x2F;&#x2F;上一个输入
+getchar(); &#x2F;&#x2F;接收回车或空格等字符
+b&#x3D;getchar();&#x2F;&#x2F;下一个输入<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="字符输出函数putchar"><a href="#字符输出函数putchar" class="headerlink" title="字符输出函数putchar"></a>字符输出函数putchar</h3><blockquote>
+<p>功能：在终端输出单个字符</p>
+</blockquote>
+<pre class="line-numbers language-none"><code class="language-none">putchar(x);  &#x2F;*输出字符变量x的值*&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>Walnut
+        </p>
+        <p>
+            <strong>
+                本文链接：
+            </strong>
+            <a href="https://yknut.github.io/2021/12/08/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8003-%E6%95%B0%E6%8D%AE%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/">https://yknut.github.io/2021/12/08/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8003-%E6%95%B0%E6%8D%AE%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新于 2021-12-08</p></div> 
+    <div class="post-entry__tags"><a href="/tags/C%E7%BC%96%E7%A8%8B/" class="post-tags__link button">C编程</a><a href="/tags/C-C/" class="post-tags__link button">C/C++</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2021/12/09/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8004-%E9%80%89%E6%8B%A9%E7%BB%93%E6%9E%84%E5%92%8C%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            C语言程序设计基础04-选择结构和循环结构
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/12/08/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8002-%E5%8F%98%E9%87%8F%E5%8F%8A%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            C语言程序设计基础02-变量及表达式
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">Walnutの博客</a>
+        </p>
+    
+    
+        
+            <p>欢迎来到Walnut的博客(´▽`ʃ♡ƪ)</p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/DioPong/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

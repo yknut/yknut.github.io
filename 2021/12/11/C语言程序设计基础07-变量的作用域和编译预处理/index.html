@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/./favicon/favicon.ico">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/./favicon/favicon-16x16.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/./favicon/favicon-32x32.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/./favicon/apple-touch-icon.png">
+    
+    
+        <link rel="mask-icon" href="/./favicon/safari-pinned-tab.svg">
+    
+
+
+    <!-- meta -->
+
+
+<title>C语言程序设计基础07-变量的作用域和编译预处理 | Walnutの博客</title>
+
+
+    <meta name="keywords" content="C编程, C/C++">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="变量的作用域是指变量在程序中的作用范围；变量的生存期是指变量值存在时间的长短。 作用域划分的变量局部变量定义在函数内部的变量称为局部变量（Local Variable），它的作用域仅限于函数内部， 离开该函数后就是无效的，再使用就会报错。 局部变量的规则 局部变量不会默认初始化 编译系统不为局部变量分配内存单元，只是当被调用时，分配临时单元，调用结束后，变量就消失了; 不同函数中可以定义同名变量，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言程序设计基础07-变量的作用域和编译预处理">
+<meta property="og:url" content="https://yknut.github.io/2021/12/11/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8007-%E5%8F%98%E9%87%8F%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E7%BC%96%E8%AF%91%E9%A2%84%E5%A4%84%E7%90%86/index.html">
+<meta property="og:site_name" content="Walnutの博客">
+<meta property="og:description" content="变量的作用域是指变量在程序中的作用范围；变量的生存期是指变量值存在时间的长短。 作用域划分的变量局部变量定义在函数内部的变量称为局部变量（Local Variable），它的作用域仅限于函数内部， 离开该函数后就是无效的，再使用就会报错。 局部变量的规则 局部变量不会默认初始化 编译系统不为局部变量分配内存单元，只是当被调用时，分配临时单元，调用结束后，变量就消失了; 不同函数中可以定义同名变量，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg">
+<meta property="article:published_time" content="2021-12-11T01:52:59.000Z">
+<meta property="article:modified_time" content="2021-12-11T01:55:40.828Z">
+<meta property="article:author" content="Walnut">
+<meta property="article:tag" content="C编程">
+<meta property="article:tag" content="C&#x2F;C++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism.min.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism-tomorrow.min.css" media="none">
+        
+    
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/line-numbers/prism-line-numbers.min.css" media="none" onload="this.media='all'">
+    
+
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Walnut</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/links/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/links/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        C语言程序设计基础07-变量的作用域和编译预处理
+    </h1>
+    <div class="post-title__meta" style="color:#808080">
+        <a href="/archives/2021/12/" class="post-meta__date button">2021-12-11</a>
+        
+    <span class="separate-dot"></span><a href="/categories/C-C-%E7%BC%96%E7%A8%8B/" class="button">C/C++编程</a>
+
+ 
+		
+<span class="post-time">
+  <span class="post-meta-item-icon">
+	<i class="fa fa-keyboard-o"></i>
+	<span class="separate-dot"></span>
+	<span class="post-count">3.5k字</span>
+  </span>
+</span>
+
+        
+    
+    
+
+
+ 
+
+
+    </div>
+</div>
+
+
+    <aside class="post-side">
+        <div class="post-side__toc">
+            <div class="toc-title">文章目录</div>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%88%92%E5%88%86%E7%9A%84%E5%8F%98%E9%87%8F"><span class="toc-text">作用域划分的变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F"><span class="toc-text">局部变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E7%9A%84%E8%A7%84%E5%88%99"><span class="toc-text">局部变量的规则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="toc-text">全局变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E8%A7%84%E5%88%99"><span class="toc-text">全局变量的规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">全局变量的优缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E7%9A%84%E5%AD%98%E5%82%A8%E7%B1%BB%E5%9E%8B"><span class="toc-text">变量的存储类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E6%94%BE%E4%BD%8D%E7%BD%AE%E5%92%8C%E7%B1%BB%E5%9E%8B"><span class="toc-text">变量在内存中的存放位置和类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">局部变量的存储方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">全局变量的存储方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E5%87%BD%E6%95%B0%E5%92%8C%E5%A4%96%E9%83%A8%E5%87%BD%E6%95%B0"><span class="toc-text">内部函数和外部函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-text">编译预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8F%E5%AE%9A%E4%B9%89"><span class="toc-text">宏定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-text">文件包含</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E7%BC%96%E8%AF%91"><span class="toc-text">条件编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%A2%84%E5%A4%84%E7%90%86%E6%8C%87%E4%BB%A4"><span class="toc-text">其他预处理指令</span></a></li></ol></li></ol>
+        </div>
+    </aside>
+    <a class="btn-toc button" id="btn-toc" tabindex="0">
+        <svg viewBox="0 0 1024 1024" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M128 256h64V192H128zM320 256h576V192H320zM128 544h64v-64H128zM320 544h576v-64H320zM128 832h64v-64H128zM320 832h576v-64H320z" fill="currentColor"></path>
+        </svg>
+    </a>
+    <div class="toc-menus" id="toc-menus">
+        <div class="toc-title">文章目录</div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%88%92%E5%88%86%E7%9A%84%E5%8F%98%E9%87%8F"><span class="toc-text">作用域划分的变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F"><span class="toc-text">局部变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E7%9A%84%E8%A7%84%E5%88%99"><span class="toc-text">局部变量的规则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="toc-text">全局变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E8%A7%84%E5%88%99"><span class="toc-text">全局变量的规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">全局变量的优缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E7%9A%84%E5%AD%98%E5%82%A8%E7%B1%BB%E5%9E%8B"><span class="toc-text">变量的存储类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E6%94%BE%E4%BD%8D%E7%BD%AE%E5%92%8C%E7%B1%BB%E5%9E%8B"><span class="toc-text">变量在内存中的存放位置和类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">局部变量的存储方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">全局变量的存储方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E5%87%BD%E6%95%B0%E5%92%8C%E5%A4%96%E9%83%A8%E5%87%BD%E6%95%B0"><span class="toc-text">内部函数和外部函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-text">编译预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8F%E5%AE%9A%E4%B9%89"><span class="toc-text">宏定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-text">文件包含</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E7%BC%96%E8%AF%91"><span class="toc-text">条件编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%A2%84%E5%A4%84%E7%90%86%E6%8C%87%E4%BB%A4"><span class="toc-text">其他预处理指令</span></a></li></ol></li></ol>
+    </div>
+
+
+<article class="post post__with-toc content-card">
+    <div class="post__header">
+    
+        <div class="post-thumbnail lazy" data-bg="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg"></div>
+    
+
+    <div class="post__expire" id="post-expired-notify">
+        <p>
+            本文最后更新于 &lt;span id=&#34;expire-date&#34;&gt;&lt;/span&gt; 天前，文中部分描述可能已经过时。
+        </p>
+    </div>
+    <script>
+        (() => {
+            var update = Date.parse("2021-12-11"),
+                date = new Date(),
+                now = date.getTime(),
+                expire = now - update,
+                expire_days = Math.floor(expire/(24*3600*1000));
+            if (expire_days >= 120) {
+                document.querySelectorAll('#expire-date')[0].innerHTML = expire_days;
+                document.querySelectorAll('#post-expired-notify')[0].style.display = 'block';
+            }
+        })();
+    </script>
+</div>
+    <div class="post__content">
+        <p>变量的作用域是指变量在程序中的作用范围；变量的生存期是指变量值存在时间的长短。</p>
+<h2 id="作用域划分的变量"><a href="#作用域划分的变量" class="headerlink" title="作用域划分的变量"></a>作用域划分的变量</h2><h3 id="局部变量"><a href="#局部变量" class="headerlink" title="局部变量"></a>局部变量</h3><p>定义在函数内部的变量称为<strong>局部变量（Local Variable）</strong>，它的作用域仅限于函数内部， 离开该函数后就是无效的，再使用就会报错。</p>
+<h4 id="局部变量的规则"><a href="#局部变量的规则" class="headerlink" title="局部变量的规则"></a>局部变量的规则</h4><ul>
+<li>局部变量不会默认初始化</li>
+<li>编译系统不为局部变量分配内存单元，只是当被调用时，分配临时单元，调用结束后，变量就消失了;</li>
+<li>不同函数中可以定义同名变量，它们占据不同的内存单元;</li>
+<li>在复合语句中定义的变量，只在本复合语句中有效;</li>
+<li>在同一个块内（函数或复合语句内）不能定义相同的变量;</li>
+<li>main函数中定义的变量也是局部变量，只在main函数中有效。main函数也不能使用其他函数定义的变量。</li>
+</ul>
+<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><p>在所有函数外部定义的变量称为<strong>全局变量（Global Variable）</strong>，它的作用域默认是整个程序，也就是所有的源文件，包括 .c 和 .h 文件。</p>
+<h4 id="全局变量的规则"><a href="#全局变量的规则" class="headerlink" title="全局变量的规则"></a>全局变量的规则</h4><ul>
+<li>若全局变量与局部变量同名，则在局部变量的作用范围内，同名的全局变量不起作用；</li>
+<li>没赋初值的全局变量默认得到0值；</li>
+<li>任何函数都可以使用全局变量。</li>
+</ul>
+<h4 id="全局变量的优缺点"><a href="#全局变量的优缺点" class="headerlink" title="全局变量的优缺点"></a>全局变量的优缺点</h4><p><strong>优点：</strong></p>
+<ul>
+<li>函数间数据联系:同一文件中的一些函数引用全局变量，当某个函数中改变了全局变量的值，其它函数中的全局变量值也随之改变。</li>
+<li>函数可以得到多个返回值。利用全局变量的这个特性，可以在函数间传递数据。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>全局变量在程序的全部执行过程中都占用存储单元。</li>
+<li>降低函数的通用性。</li>
+</ul>
+<h2 id="变量的存储类型"><a href="#变量的存储类型" class="headerlink" title="变量的存储类型"></a>变量的存储类型</h2><p>从变量值存在的时间（即生存期）看，变量的存储有两种不同的方式:静态存储和动态存储。</p>
+<ul>
+<li><p>静态存储方式：在程序运行期间由系统分配固定的存储空间；从程序开始执行到程序结束。变量的值在整个程序中始终存在。</p>
+</li>
+<li><p>动态存储方式：在程序运行期间根据需要进行动态的分配存储空间；从包含该变量定义的函数开始执行至函数执行结束。变量的值只在函数调用期存在。</p>
+</li>
+</ul>
+<h3 id="变量在内存中的存放位置和类型"><a href="#变量在内存中的存放位置和类型" class="headerlink" title="变量在内存中的存放位置和类型"></a>变量在内存中的存放位置和类型</h3><p>存储空间划分：</p>
+<ul>
+<li>程序区</li>
+<li>静态存储区：全局变量，局部静态变量</li>
+<li>动态存储区：形参、局部变量、函数调用的现场等</li>
+</ul>
+<p>存储类型：</p>
+<ul>
+<li>auto        自动变量——动态存储区</li>
+<li>register   寄存器变量——CPU中的寄存器</li>
+<li>extern     外部变量——静态存储区<ul>
+<li>外部变量(即全局变量)是在函数的外部定义的，它的作用域为从变量定义处开始，到本程序文件的末尾。如果外部变量不在文件的开头定义，其有效的作用范围只限于定义处到文件末尾。如果在定义点之前的函数想引用该外部变量，则应该在引用之前用关键字 extern 对该变量进行“外部变量声明”。表示该变量是一个已经定义的外部变量。</li>
+</ul>
+</li>
+<li>static       静态变量——静态存储区</li>
+</ul>
+<h3 id="局部变量的存储方式"><a href="#局部变量的存储方式" class="headerlink" title="局部变量的存储方式"></a>局部变量的存储方式</h3><ol>
+<li><p><strong>自动变量(auto)</strong></p>
+<ul>
+<li><p>函数中的局部变量，如不专门声明为 static 存储类别，都是动态地分配存储空间的，数据存储在动态存储区中。函数中的形参和在函数中定义的变量(包括在复合语句中定义的变量)都属此类，在调用该函数时系统会给它们分配存储空间，在函数调用结束时就自动释放这些存储空间。自动变量用关键字 auto 进行存储类别的声明。</p>
+</li>
+<li><p>定义形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">[auto] 类型说明符 变量名;  &#x2F;* 关键字auto可以省略 *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>说明：</p>
+<ul>
+<li>自动变量必须在一个<strong>函数体的内部</strong>，分配在<strong>动态存储区</strong>。</li>
+<li>自动变量不赋初值，其值不确定。每调用一次，重新赋值一次。</li>
+<li>函数的形参也是自动变量。</li>
+<li>“自动”体现在进入语句块时自动申请内存，退出时自动释放内存;对它们分配和释放存储空间的工作由编译系统自动处理。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>静态局部变量(static)</strong></p>
+<ul>
+<li><p>有时希望函数中局部变量的值在函数调用结束后不消失（以后一直存在，并总是保持它的最新值，即具有记忆性），即不释放存储单元。此时可指定该变量为“静态局部变量”。</p>
+</li>
+<li><p>定义形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">static 类型说明符 变量名;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>特性：</p>
+<ul>
+<li>静态局部变量系统自动初始化为0，存放在静态存储区；生存期为整个程序运行期间；</li>
+<li>静态局部变量和全局变量都是静态存储类型，但作用域不同；</li>
+<li>静态局部变量<strong>在编译时赋初值</strong>，每次<strong>调用时不再赋初值</strong>，只保留调用结束时变量的值。其值在整个程序运行期间都不释放。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>寄存器变量(register)</strong></p>
+<ul>
+<li><p>对频繁使用的变量，为减少存取变量花费的时间，c语言允许将局部变量的值存放在CPU运算器的寄存器中，称为“寄存器变量”，用关键字“register”说明。</p>
+</li>
+<li><p>定义形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">register 类型说明符 变量名;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>说明：</p>
+<ul>
+<li>寄存器变量的类型一般只限于<strong>整型、字符型</strong>或<strong>指向整型、字符型的指针</strong>，且只用于局部变量和形参变量。</li>
+<li>全局变量、局部静态变量不可以作为寄存器变量。</li>
+<li>不能定义任意多个寄存器变量，因为一个计算机系统中寄存器的数目是有限的。不能取寄存器变量的地址。</li>
+<li>不能使用取地址运算符“&amp;”求寄存器变量的地址。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="全局变量的存储方式"><a href="#全局变量的存储方式" class="headerlink" title="全局变量的存储方式"></a>全局变量的存储方式</h3><ol>
+<li><p><strong>外部全局变量</strong></p>
+<ul>
+<li><p>一个文件中要引用其他文件中定义的全局变量，应该在需要引用此变量的文件中用extern进行说明。</p>
+</li>
+<li><p>定义方式：</p>
+<pre class="line-numbers language-none"><code class="language-none">extern 类型说明符 变量名;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ul>
+</li>
+<li><p><strong>静态全局变量</strong></p>
+<ul>
+<li><p>一个文件中的全局变量仅限于定义它的文件引用，而不能被其它文件访问,熏要用static进行说明。</p>
+</li>
+<li><p>定义方式：</p>
+<pre class="line-numbers language-none"><code class="language-none">static 类型说明符 变量名;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ul>
+<p>说明：</p>
+<ul>
+<li>外部全局变量与静态全局变量在同一文件内的作用域一样；</li>
+<li>外部全局变量可以被多个文件引用，而静态全局变量仅在定义它的文件内有效，在程序的其它文件中不可使用。</li>
+</ul>
+</li>
+</ol>
+<h2 id="内部函数和外部函数"><a href="#内部函数和外部函数" class="headerlink" title="内部函数和外部函数"></a>内部函数和外部函数</h2><ul>
+<li><p><strong>内部函数</strong></p>
+<ul>
+<li><p>内部函数是只能被本文件中其他函数调用的函数，又称<strong>静态函数</strong>，函数的作用域仅限于本文件。</p>
+</li>
+<li><p>定义形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">static int fun( int a, int b);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>作用：</p>
+<ul>
+<li>使用内部函数，可以使函数只局限于所在文件，如果在不同的文件中有同名的内部函数，互不干扰。</li>
+<li>这样不同的人可以分别编写不同的函数，而不必担心所用函数是否会与其他文件中函数同名。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>外部函数</p>
+<ul>
+<li><p>外部函数是允许被其它文件调用的函数。</p>
+</li>
+<li><p>定义形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">[extern] int fun( int a, int b);  &#x2F;* extern可省略 *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>说明：</p>
+<ul>
+<li><p>在需要调用此函数的文件中，要用extern声明所用函数是外部函数。</p>
+<p>例如，在源文件A中调用另一源文件B中的函数fun，则需要在源文件A中对函数fun进行说明，格式为: <code>extern int fun() ;</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="编译预处理"><a href="#编译预处理" class="headerlink" title="编译预处理"></a>编译预处理</h2><p>C语言源文件要经过编译、链接才能生成可执行程序：</p>
+<ol>
+<li><p>编译（Compile）会将源文件（<code>.c</code>文件）转换为目标文件。对于 VC/VS，目标文件后缀为<code>.obj</code>；对于GCC，目标文件后缀为<code>.o</code>。</p>
+<p>编译是针对单个源文件的，一次编译操作只能编译一个源文件，如果程序中有多个源文件，就需要多次编译操作。</p>
+</li>
+<li><p>接（Link）是针对多个文件的，它会将编译生成的多个目标文件以及系统中的库、组件等合并成一个可执行程序。</p>
+</li>
+</ol>
+<p>预处理是在编译之前对程序中的特殊命令进行的处理工作，由<strong>预处理程序</strong>完成。以#开头的是C语言的编译预处理命令。</p>
+<p>当对一个源文件进行编译时，系统将自动调用预处理程序对源程序中的预处理部分作处理，处理完毕自动进入对源程序的编译。</p>
+<p>C语言中的预处理命令分类:</p>
+<ul>
+<li>宏定义#define</li>
+<li>文件包含#include</li>
+<li>条件编译#if( )</li>
+</ul>
+<h3 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a>宏定义</h3><ul>
+<li><p>功能：在预处理时，将程序中宏定义之后出现的所有的宏名,用宏替换字符串代替。这个过程也称为<strong>宏展开</strong>，即将宏名替换成字符串的过程。</p>
+</li>
+<li><p>一般形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">#define 宏名 字符串<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>说明：</p>
+<ul>
+<li>宏定义通常放在程序开头，以#开头，不加分号。</li>
+<li>宏名一般习惯用<strong>大写字母</strong>表示。</li>
+<li>一个宏名只能被定义一次。</li>
+<li>宏定义的作用域：从定义开始到程序结尾。</li>
+<li>在进行宏定义时，可以引用已定义的其他宏名。</li>
+<li>对在字符串常量及用户标识符中，与宏名相同部分不作替换。</li>
+</ul>
+</li>
+<li><p>优点：</p>
+<ul>
+<li>可提高源程序的可维护性;</li>
+<li>可提高源程序的可移植性;</li>
+<li>减少源程序中重复书写字符串的工作量。</li>
+</ul>
+</li>
+</ul>
+<p><strong>带参数的宏定义</strong></p>
+<ul>
+<li><p>功能：预处理程序对程序中所有带实参表的宏名进行宏展开替换。</p>
+</li>
+<li><p>一般形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">#define 宏名(形参表) 字符串<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>有参宏的调用和宏展开</p>
+<ul>
+<li><p>调用格式：<code>宏名(实参表)</code></p>
+<p>例如：</p>
+<pre class="line-numbers language-none"><code class="language-none">#define M(y) y*y+3*y
+&#x2F;*宏定义*&#x2F;
+......
+k&#x3D;M(5);
+&#x2F;*宏调用*&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>宏展开：首先进行宏展开，然后用宏调用提供的实参字符串，直接置换宏定义命令行中相应形参字符串，非形参字符保持不变。</p>
+<p>例如：</p>
+<pre class="line-numbers language-none"><code class="language-none">#define X(a) a*a
+X(4+5)的值为4+5*4+5&#x3D;29   &#x2F;&#x2F;不是81！！！
+---------------------
+#define X(a)  (a)*(a)
+X(4+5)的值为(4+5)*(4+5)&#x3D;81<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+</li>
+</ul>
+<h3 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h3><ul>
+<li><p>文件包含是指一个源文件可以将另一个源文件的全部文本内容插入到它所在的位置。</p>
+</li>
+<li><p>两种形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">#include &quot;文件名&quot;  &#x2F;&#x2F;先在当前目录下查找,再到系统指定目录下查找。
+#include &lt;文件名&gt;	&#x2F;&#x2F;在系统指定目录下查找<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li><p>说明：</p>
+<ul>
+<li>只包含源文件，不包含可执行文件和目标文件。</li>
+<li>一个#include只能包含一个文件。</li>
+<li>可以将常用的符号常量、带参数的宏定义、外部变量及构造类型的变量等定义在一个独立的文件中，为其他文件共享。</li>
+</ul>
+</li>
+</ul>
+<h3 id="条件编译"><a href="#条件编译" class="headerlink" title="条件编译"></a>条件编译</h3><ul>
+<li><p>预处理程序提供了条件编译的功能,可以按不同的条件去编译不同的程序部分,因而产生不同 的目标代码文件,这对于程序的移植和调试是很有用的。</p>
+</li>
+<li><p>三种形式：</p>
+<ul>
+<li><p>第一种</p>
+<pre class="line-numbers language-none"><code class="language-none">#ifdef 标识符 
+程序段 1 
+#else 
+程序段 2 
+#endif <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>它的功能是如果标识符已被 #define 命令定义过则对程序段 1 进行编译；否则对程序段 2 进行编译。<br>如果没有程序段2(为空),本格式中的#else 可以没有，即可以写为: </p>
+<pre class="line-numbers language-none"><code class="language-none">#ifdef 标识符 
+程序段 
+#endif <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<li><p>第二种</p>
+<pre class="line-numbers language-none"><code class="language-none">#ifndef 标识符 
+程序段 1 #else 
+程序段 2 #endif <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>与第一种形式的区别是将<code>“ifdef”</code>改为<code>“ifndef”</code>。它的功能是如果标识符未被#define 命令定义过则对程序段 1 进行编译,否则对程序段 2 进行编译。这与第一种形式的功能正好相反。</p>
+</li>
+<li><p>第三种</p>
+<pre class="line-numbers language-none"><code class="language-none">#if 常量表达式 
+程序段 1 #else 
+程序段 2 #endif <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>它的功能是如果常量表达式的值为真(非 0)，则对程序段 1 进行编译，否则对程序段 2 进行编译。 </p>
+</li>
+</ul>
+</li>
+<li><p>条件编译的作用：</p>
+<p>可有效地提高程序的可移植性，并广泛地应用在商业软件中，为一个程序提供各种不同的版本。</p>
+</li>
+</ul>
+<h3 id="其他预处理指令"><a href="#其他预处理指令" class="headerlink" title="其他预处理指令"></a>其他预处理指令</h3><ul>
+<li><p> #error </p>
+</li>
+<li><p>#error 指令强制编译程序停止编译,它主要用于程序调试</p>
+</li>
+<li><p>一般形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">#error error-message <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>注意,宏串 error-message 不用双引号引起来。遇到#error 指令时,错误信息被显示,可能同时还显示<br>编译程序作者预先定义的其他内容。 </p>
+</li>
+<li><p>#line </p>
+<ul>
+<li><p>#line 指令改变__LINE__和__FILE__的内容。__LINE__和__FILE__都是编译程序中预定义的标识符。__LINE__的内容是当前被编译代码行的行号；__FILE__的内容是当前被编译源文件的文件名。 </p>
+</li>
+<li><p>一般形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">#line number “filename” <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>其中,number 是正整数并变成__LINE__的新值; 可选的“filename”是合法文件标识符并变成__FILE__的新值。#line 主要用于调试和特殊应用。 </p>
+</li>
+</ul>
+</li>
+<li><p>#pragma </p>
+<ul>
+<li><p>#pragma 是编译程序实现时定义的指令，它允许由此向编译程序传入各种指令。</p>
+<p>例如，一个编译程序可能具有支持跟踪程序执行的选项，此时可以用#pragma 语句选择该功能，编译程序忽略其不支持的#pragma 选项。</p>
+</li>
+<li><p>使用#pragma 预处理命令可提高 C 源程序对编译程序的可移植性。 </p>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>Walnut
+        </p>
+        <p>
+            <strong>
+                本文链接：
+            </strong>
+            <a href="https://yknut.github.io/2021/12/11/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8007-%E5%8F%98%E9%87%8F%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E7%BC%96%E8%AF%91%E9%A2%84%E5%A4%84%E7%90%86/">https://yknut.github.io/2021/12/11/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8007-%E5%8F%98%E9%87%8F%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E7%BC%96%E8%AF%91%E9%A2%84%E5%A4%84%E7%90%86/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新于 2021-12-11</p></div> 
+    <div class="post-entry__tags"><a href="/tags/C%E7%BC%96%E7%A8%8B/" class="post-tags__link button">C编程</a><a href="/tags/C-C/" class="post-tags__link button">C/C++</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2021/12/12/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8008-%E6%8C%87%E9%92%88/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            C语言程序设计基础08-指针
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/12/11/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8006-%E5%87%BD%E6%95%B0/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            C语言程序设计基础06-函数
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">Walnutの博客</a>
+        </p>
+    
+    
+        
+            <p>欢迎来到Walnut的博客(´▽`ʃ♡ƪ)</p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/DioPong/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

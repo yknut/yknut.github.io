@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/./favicon/favicon.ico">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/./favicon/favicon-16x16.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/./favicon/favicon-32x32.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/./favicon/apple-touch-icon.png">
+    
+    
+        <link rel="mask-icon" href="/./favicon/safari-pinned-tab.svg">
+    
+
+
+    <!-- meta -->
+
+
+<title>C语言程序设计基础04-选择结构和循环结构 | Walnutの博客</title>
+
+
+    <meta name="keywords" content="C编程, C/C++">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="C语言中有三大结构，分别是顺序结构、选择结构和循环结构 选择结构 选择结构：根据给定的判断条件，控制程序执行流程的语句。  if-else语句单分支if语句： if(表达式) &#x2F;*若条件成立则实行花括号里的语句，反之则不执行*&#x2F;  &amp;#123;      &#x2F;&#x2F;语句  &amp;#125;  双分支if-else语句： if(表达式) &#x2F;*若表达式成立则执行语句1，否则执行语句2*&#x2F;  &amp;#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言程序设计基础04-选择结构和循环结构">
+<meta property="og:url" content="https://yknut.github.io/2021/12/09/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8004-%E9%80%89%E6%8B%A9%E7%BB%93%E6%9E%84%E5%92%8C%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="Walnutの博客">
+<meta property="og:description" content="C语言中有三大结构，分别是顺序结构、选择结构和循环结构 选择结构 选择结构：根据给定的判断条件，控制程序执行流程的语句。  if-else语句单分支if语句： if(表达式) &#x2F;*若条件成立则实行花括号里的语句，反之则不执行*&#x2F;  &amp;#123;      &#x2F;&#x2F;语句  &amp;#125;  双分支if-else语句： if(表达式) &#x2F;*若表达式成立则执行语句1，否则执行语句2*&#x2F;  &amp;#123;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg">
+<meta property="article:published_time" content="2021-12-09T15:31:38.000Z">
+<meta property="article:modified_time" content="2021-12-09T18:45:07.232Z">
+<meta property="article:author" content="Walnut">
+<meta property="article:tag" content="C编程">
+<meta property="article:tag" content="C&#x2F;C++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism.min.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism-tomorrow.min.css" media="none">
+        
+    
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/line-numbers/prism-line-numbers.min.css" media="none" onload="this.media='all'">
+    
+
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Walnut</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/links/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/links/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        C语言程序设计基础04-选择结构和循环结构
+    </h1>
+    <div class="post-title__meta" style="color:#808080">
+        <a href="/archives/2021/12/" class="post-meta__date button">2021-12-09</a>
+        
+    <span class="separate-dot"></span><a href="/categories/C-C-%E7%BC%96%E7%A8%8B/" class="button">C/C++编程</a>
+
+ 
+		
+<span class="post-time">
+  <span class="post-meta-item-icon">
+	<i class="fa fa-keyboard-o"></i>
+	<span class="separate-dot"></span>
+	<span class="post-count">2.1k字</span>
+  </span>
+</span>
+
+        
+    
+    
+
+
+ 
+
+
+    </div>
+</div>
+
+
+    <aside class="post-side">
+        <div class="post-side__toc">
+            <div class="toc-title">文章目录</div>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E7%BB%93%E6%9E%84"><span class="toc-text">选择结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if-else%E8%AF%AD%E5%8F%A5"><span class="toc-text">if-else语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#switch%E8%AF%AD%E5%8F%A5"><span class="toc-text">switch语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">条件运算符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84"><span class="toc-text">循环结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#while%E8%AF%AD%E5%8F%A5"><span class="toc-text">while语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-while%E8%AF%AD%E5%8F%A5"><span class="toc-text">do-while语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5"><span class="toc-text">for循环语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E5%B5%8C%E5%A5%97"><span class="toc-text">循环嵌套</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="toc-text">循环流程控制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#break%E8%AF%AD%E5%8F%A5"><span class="toc-text">break语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#continue%E8%AF%AD%E5%8F%A5"><span class="toc-text">continue语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#goto%E8%AF%AD%E5%8F%A5"><span class="toc-text">goto语句</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E6%B3%95"><span class="toc-text">迭代法</span></a></li></ol></li></ol>
+        </div>
+    </aside>
+    <a class="btn-toc button" id="btn-toc" tabindex="0">
+        <svg viewBox="0 0 1024 1024" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M128 256h64V192H128zM320 256h576V192H320zM128 544h64v-64H128zM320 544h576v-64H320zM128 832h64v-64H128zM320 832h576v-64H320z" fill="currentColor"></path>
+        </svg>
+    </a>
+    <div class="toc-menus" id="toc-menus">
+        <div class="toc-title">文章目录</div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E7%BB%93%E6%9E%84"><span class="toc-text">选择结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if-else%E8%AF%AD%E5%8F%A5"><span class="toc-text">if-else语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#switch%E8%AF%AD%E5%8F%A5"><span class="toc-text">switch语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">条件运算符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84"><span class="toc-text">循环结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#while%E8%AF%AD%E5%8F%A5"><span class="toc-text">while语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-while%E8%AF%AD%E5%8F%A5"><span class="toc-text">do-while语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5"><span class="toc-text">for循环语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E5%B5%8C%E5%A5%97"><span class="toc-text">循环嵌套</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="toc-text">循环流程控制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#break%E8%AF%AD%E5%8F%A5"><span class="toc-text">break语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#continue%E8%AF%AD%E5%8F%A5"><span class="toc-text">continue语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#goto%E8%AF%AD%E5%8F%A5"><span class="toc-text">goto语句</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E6%B3%95"><span class="toc-text">迭代法</span></a></li></ol></li></ol>
+    </div>
+
+
+<article class="post post__with-toc content-card">
+    <div class="post__header">
+    
+        <div class="post-thumbnail lazy" data-bg="https://s2.loli.net/2021/12/07/IaOFM76eLsYcPdg.jpg"></div>
+    
+
+    <div class="post__expire" id="post-expired-notify">
+        <p>
+            本文最后更新于 &lt;span id=&#34;expire-date&#34;&gt;&lt;/span&gt; 天前，文中部分描述可能已经过时。
+        </p>
+    </div>
+    <script>
+        (() => {
+            var update = Date.parse("2021-12-10"),
+                date = new Date(),
+                now = date.getTime(),
+                expire = now - update,
+                expire_days = Math.floor(expire/(24*3600*1000));
+            if (expire_days >= 120) {
+                document.querySelectorAll('#expire-date')[0].innerHTML = expire_days;
+                document.querySelectorAll('#post-expired-notify')[0].style.display = 'block';
+            }
+        })();
+    </script>
+</div>
+    <div class="post__content">
+        <p>C语言中有三大结构，分别是顺序结构、选择结构和循环结构</p>
+<h2 id="选择结构"><a href="#选择结构" class="headerlink" title="选择结构"></a>选择结构</h2><blockquote>
+<p>选择结构：根据给定的判断条件，控制程序执行流程的语句。</p>
+</blockquote>
+<h3 id="if-else语句"><a href="#if-else语句" class="headerlink" title="if-else语句"></a>if-else语句</h3><p>单分支if语句：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span> <span class="token comment">/*若条件成立则实行花括号里的语句，反之则不执行*/</span> 
+<span class="token punctuation">&#123;</span> 
+    <span class="token comment">//语句 </span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>双分支if-else语句：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span> <span class="token comment">/*若表达式成立则执行语句1，否则执行语句2*/</span> 
+<span class="token punctuation">&#123;</span> 
+    <span class="token comment">//语句1 </span>
+<span class="token punctuation">&#125;</span> 
+<span class="token keyword">else</span> 
+<span class="token punctuation">&#123;</span> 
+    <span class="token comment">//语句2 </span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>多分支if-else语句</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span> <span class="token comment">/*如果表达式成立，执行语句1否则继续判断表达式2*/</span> 
+<span class="token punctuation">&#123;</span> 
+    <span class="token comment">//语句1 </span>
+<span class="token punctuation">&#125;</span> 
+<span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>表达式<span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment">/*如果表达式成立，执行语句2否则继续判断表达式3*/</span> 
+<span class="token punctuation">&#123;</span> 
+    <span class="token comment">//语句2 </span>
+<span class="token punctuation">&#125;</span> 
+<span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>表达式<span class="token number">3</span><span class="token punctuation">)</span>  <span class="token comment">/*如果表达式成立，则执行语句3否则继续判断下一个表达式*/</span> 
+<span class="token punctuation">&#123;</span> 
+    <span class="token comment">//语句3; </span>
+<span class="token punctuation">&#125;</span> 
+<span class="token comment">//… … </span>
+<span class="token keyword">else</span>    <span class="token comment">/*如果以上表达式都不成立 则执行语句4*/</span> 
+<span class="token punctuation">&#123;</span> 
+    <span class="token comment">//语句4 </span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="switch语句"><a href="#switch语句" class="headerlink" title="switch语句"></a>switch语句</h3><p>switch语句的执行过程为：首先计算表达式的值，然后依次与常量表达式依次进行比较，若表达式的值与某常量表达式相等，则从该常量表达式处开始执行，直到switch语句结束。若所有的常量表达式的值均不等于表达式的值，则从default处开始执行。 </p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">switch</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span> <span class="token comment">/*首先计算表达式的值，整型或者字符型*/</span> 
+<span class="token punctuation">&#123;</span> 
+    <span class="token keyword">case</span> 常量表达式<span class="token number">1</span><span class="token operator">:</span>语句<span class="token number">1</span><span class="token punctuation">;</span> 
+    <span class="token keyword">case</span> 常量表达式<span class="token number">2</span><span class="token operator">:</span>语句<span class="token number">2</span><span class="token punctuation">;</span> 
+    <span class="token keyword">case</span> 常量表达式<span class="token number">3</span><span class="token operator">:</span>语句<span class="token number">3</span><span class="token punctuation">;</span> 
+    <span class="token comment">// … … </span>
+    <span class="token keyword">case</span> 常量表达式n<span class="token operator">:</span>语句n<span class="token punctuation">;</span> 
+    <span class="token keyword">default</span><span class="token operator">:</span>语句n<span class="token operator">+</span><span class="token number">1</span>； <span class="token comment">//defalult子句是可以省略的</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果希望只执行某一个分支，而跳过后面的其他分支，必须要在每个分支最后添加<font color=deepskyblue><code>break;</code></font>语句。</p>
+<p>任何一种选择结构都可以用if语句来实现，但并非所有的if语句都有等价的switch语句。switch语句只能用来实现以相等关系作为选择条件的选择结构。</p>
+<h3 id="条件运算符"><a href="#条件运算符" class="headerlink" title="条件运算符"></a>条件运算符</h3><p>条件运算符：唯一的三目运算符，要求有三个操作对象。</p>
+<pre class="line-numbers language-none"><code class="language-none">一般形式：表达式1?表达式2:表达式3<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>首先计算表达式1的值，判断表达式1的真假。如果表达式1为真，三目运算符整体的值就是表达式2的值，否则（表达式1不成立），这个三目运算符整体的值就是表达式3的值。</p>
+<h2 id="循环结构"><a href="#循环结构" class="headerlink" title="循环结构"></a>循环结构</h2><h3 id="while语句"><a href="#while语句" class="headerlink" title="while语句"></a>while语句</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">while</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">//语句块</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>先计算“表达式”的值，当值为真（非0）时， 执行“语句块”；执行完“语句块”，再次计算表达式的值，如果为真，继续执行“语句块”……这个过程会一直重复，直到表达式的值为假（0），就退出循环，执行 while 后面的代码。</p>
+<p>我们通常将“表达式”称为循环条件，把“语句块”称为循环体，整个循环的过程就是不停判断循环条件、并执行循环体代码的过程。</p>
+<h3 id="do-while语句"><a href="#do-while语句" class="headerlink" title="do-while语句"></a>do-while语句</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">do</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">//语句块</span>
+<span class="token punctuation">&#125;</span><span class="token keyword">while</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>do-while循环与while循环的不同在于：它会先执行“语句块”，然后再判断表达式是否为真，如果为真则继续循环；如果为假，则终止循环。因此，do-while 循环<strong>至少要执行一次</strong>“语句块”。</p>
+<h3 id="for循环语句"><a href="#for循环语句" class="headerlink" title="for循环语句"></a>for循环语句</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">for</span><span class="token punctuation">(</span>初始化表达式<span class="token number">1</span><span class="token punctuation">;</span> 判断表达式<span class="token number">2</span><span class="token punctuation">;</span> 更新表达式<span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">//语句块</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*
+(1)表达式1仅被执行一次，一般用来为循环变量赋初值;
+(2)表达式2决定了是否继续执行循环称为循环条件;
+(3)表达式3则不断修改循环控制变量的值。
+*/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>for语句的三个表达式均可省略，<font color=deepskyblue><code>for(;;;)</code></font>，但分号不能省略。</p>
+<h3 id="循环嵌套"><a href="#循环嵌套" class="headerlink" title="循环嵌套"></a>循环嵌套</h3><blockquote>
+<p>定义：在循环体内又包含一个循环语句，称为循环嵌套。</p>
+</blockquote>
+<p>打印九九乘法表：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">,</span> j<span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span> i<span class="token operator">&lt;=</span><span class="token number">9</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>  <span class="token comment">//外层for循环</span>
+        <span class="token keyword">for</span><span class="token punctuation">(</span>j<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span> j<span class="token operator">&lt;=</span>i<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>  <span class="token comment">//内层for循环</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d*%d=%-2d  "</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> j<span class="token punctuation">,</span> i<span class="token operator">*</span>j<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>运行结果：</p>
+<pre class="line-numbers language-none"><code class="language-none">1*1&#x3D;1   
+2*1&#x3D;2   2*2&#x3D;4
+3*1&#x3D;3   3*2&#x3D;6   3*3&#x3D;9
+4*1&#x3D;4   4*2&#x3D;8   4*3&#x3D;12  4*4&#x3D;16
+5*1&#x3D;5   5*2&#x3D;10  5*3&#x3D;15  5*4&#x3D;20  5*5&#x3D;25
+6*1&#x3D;6   6*2&#x3D;12  6*3&#x3D;18  6*4&#x3D;24  6*5&#x3D;30  6*6&#x3D;36
+7*1&#x3D;7   7*2&#x3D;14  7*3&#x3D;21  7*4&#x3D;28  7*5&#x3D;35  7*6&#x3D;42  7*7&#x3D;49
+8*1&#x3D;8   8*2&#x3D;16  8*3&#x3D;24  8*4&#x3D;32  8*5&#x3D;40  8*6&#x3D;48  8*7&#x3D;56  8*8&#x3D;64
+9*1&#x3D;9   9*2&#x3D;18  9*3&#x3D;27  9*4&#x3D;36  9*5&#x3D;45  9*6&#x3D;54  9*7&#x3D;63  9*8&#x3D;72  9*9&#x3D;81<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>内层 for 每循环一次输出一个数据，而外层 for 每循环一次输出一行数据。</p>
+<h3 id="循环流程控制"><a href="#循环流程控制" class="headerlink" title="循环流程控制"></a>循环流程控制</h3><h4 id="break语句"><a href="#break语句" class="headerlink" title="break语句"></a>break语句</h4><blockquote>
+<p>功能：终止包含该语句的最内层循环。</p>
+</blockquote>
+<h4 id="continue语句"><a href="#continue语句" class="headerlink" title="continue语句"></a>continue语句</h4><blockquote>
+<p>功能：结束循环体的本次执行，进入下一次执行</p>
+</blockquote>
+<p>break与continue的对比：break 用来结束所有循环，循环语句不再有执行的机会；continue 用来结束本次循环，直接跳到下一次循环，如果循环条件成立，还会继续循环。</p>
+<h4 id="goto语句"><a href="#goto语句" class="headerlink" title="goto语句"></a>goto语句</h4><blockquote>
+<p>功能：程序无条件跳到标号指定的位置继续执行。</p>
+</blockquote>
+<p>不推荐使用</p>
+<h3 id="迭代法"><a href="#迭代法" class="headerlink" title="迭代法"></a>迭代法</h3><p>关键步骤：</p>
+<ol>
+<li>确定迭代变量：也就是直接或间接地不断由旧值递推出新值的变量。</li>
+<li>建立迭代关系式：指如何从变量的前一个值推出其下一个值的公式(或关系)。</li>
+<li>对迭代过程进行控制。在什么时候结束迭代过程?</li>
+</ol>
+<p>一般形式：</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F;迭代变量赋初值
+while(!迭代终止条件)
+&#123;
+	&#x2F;&#x2F;根据迭代表达式，由旧值计算新值
+	&#x2F;&#x2F;新值取代旧值，为下次迭代做准备
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>经典算法例题：</p>
+<ul>
+<li>斐波那契数列</li>
+<li>求最大公约数</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">最大公约数算法
+1. 穷举法
+从两个数中的一个开始（最好从较小的开始），用每一个可能的约数去测试，找出两个数公有的约数，测试结束．
+例如，求12和30的最大公约数．
+12的约数有：1、2、3、4、6、12；
+30的约数有：1、2、3、5、6、10、15、30．
+12和30的公约数有：1、2、3、6，其中6就是12和30的最大公约数． 
+从12开始, 12, 11, 10 …… 6, 其中6就是12和30的最大公约数
+也可以从从30开始 30,29,28…12,11，10……6, 其中6就是12和30的最大公约数.
+
+2. 更相减损术
+《九章算术》是中国古代的数学专著，其中的“更相减损术”可以用来求两个数的最大公约数，即“可半者半之，不可半者，副置分母、子之数，以少减多，更相减损，求其等也。以等数约之。” 
+　　翻译成现代语言如下： 
+　　第一步：任意给定两个正整数；判断它们是否都是偶数。若是，则用2约简；若不是则执行第二步。 
+    (该步骤也可省略）
+　　第二步：以较大的数减较小的数，接着把所得的差与较小的数比较，并以大数减小数。继续这个操作，直到所得的减数和差相等为止。 
+　　则第一步中约掉的若干个2与第二步中等数的乘积就是所求的最大公约数。 
+　　其中所说的“等数”，就是最大公约数。求“等数”的办法是“更相减损”法。
+　　
+3. 辗转相除法（欧几里得算法）
+　　当两个数都较大时，采用辗转相除法比较方便．其方法是：
+　　以小数除大数，如果能整除，那么小数就是所求的最大公约数．否则就用余数来除刚才的除数；再用这新除法的余数去除刚才的余数．依此类推，直到一个除法能够整除，这时作为除数的数就是所求的最大公约数．
+　　例如：求4453和5767的最大公约数时，可作如下除法．
+　　5767÷4453＝1余1314
+　　4453÷1314＝3余511
+　　1314÷511＝2余292
+　　511÷292＝1余219
+　　292÷219＝1余73
+　　219÷73＝3
+　　于是得知，5767和4453的最大公约数是73。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>Walnut
+        </p>
+        <p>
+            <strong>
+                本文链接：
+            </strong>
+            <a href="https://yknut.github.io/2021/12/09/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8004-%E9%80%89%E6%8B%A9%E7%BB%93%E6%9E%84%E5%92%8C%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84/">https://yknut.github.io/2021/12/09/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8004-%E9%80%89%E6%8B%A9%E7%BB%93%E6%9E%84%E5%92%8C%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新于 2021-12-10</p></div> 
+    <div class="post-entry__tags"><a href="/tags/C%E7%BC%96%E7%A8%8B/" class="post-tags__link button">C编程</a><a href="/tags/C-C/" class="post-tags__link button">C/C++</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2021/12/10/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8005-%E6%95%B0%E7%BB%84/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            C语言程序设计基础05-数组
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/12/08/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8003-%E6%95%B0%E6%8D%AE%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            C语言程序设计基础03-数据的输入输出
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">Walnutの博客</a>
+        </p>
+    
+    
+        
+            <p>欢迎来到Walnut的博客(´▽`ʃ♡ƪ)</p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/DioPong/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>
