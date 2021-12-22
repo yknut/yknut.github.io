@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/./favicon/favicon.ico">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/./favicon/favicon-16x16.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/./favicon/favicon-32x32.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/./favicon/apple-touch-icon.png">
+    
+    
+        <link rel="mask-icon" href="/./favicon/safari-pinned-tab.svg">
+    
+
+
+    <!-- meta -->
+
+
+<title>数据结构01-基本概念 | Walnutの博客</title>
+
+
+    <meta name="keywords" content="数据结构">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="数据结构相关的概念数据的概念：  **数据(Data)**是信息的载体，在计算机中指所有能输入到计算机中并能被计算机程序识别、存储、处理的符号集合。例如实数、字符串、图像、音频等。 **数据元素(Data Element)**是数据基本单位，也称元素(Element)、结点(Node)、顶点(Vertex)、记录(Record)，在计算机程序中常作为一个整体进行考虑和处埋。一个数据元素可以是不可分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构01-基本概念">
+<meta property="og:url" content="https://blog.wnut.cc/2021/12/23/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%8401-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/index.html">
+<meta property="og:site_name" content="Walnutの博客">
+<meta property="og:description" content="数据结构相关的概念数据的概念：  **数据(Data)**是信息的载体，在计算机中指所有能输入到计算机中并能被计算机程序识别、存储、处理的符号集合。例如实数、字符串、图像、音频等。 **数据元素(Data Element)**是数据基本单位，也称元素(Element)、结点(Node)、顶点(Vertex)、记录(Record)，在计算机程序中常作为一个整体进行考虑和处埋。一个数据元素可以是不可分">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/wnut/imgbed/img/data_structure.jpg">
+<meta property="article:published_time" content="2021-12-22T18:40:05.000Z">
+<meta property="article:modified_time" content="2021-12-22T18:43:06.940Z">
+<meta property="article:author" content="Walnut">
+<meta property="article:tag" content="数据结构">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/wnut/imgbed/img/data_structure.jpg">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism.min.css" media="none" >
+        
+            <link rel="stylesheet" id="hl-dark-theme" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/themes/prism-tomorrow.min.css" media="none">
+        
+    
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/line-numbers/prism-line-numbers.min.css" media="none" onload="this.media='all'">
+    
+
+
+    
+    
+<link rel="stylesheet" href="/css/style/dark.css">
+
+    
+<script src="/js/darkmode.js"></script>
+
+
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">Walnut</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/links/" class="navbar-menu button">友链</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+    <a href="javaScript:void(0);" id="btn-toggle-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
+
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/links/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        数据结构01-基本概念
+    </h1>
+    <div class="post-title__meta" style="color:#808080">
+        <a href="/archives/2021/12/" class="post-meta__date button">2021-12-23</a>
+        
+    <span class="separate-dot"></span><a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="button">数据结构</a>
+
+ 
+		
+<span class="post-time">
+  <span class="post-meta-item-icon">
+	<i class="fa fa-keyboard-o"></i>
+	<span class="separate-dot"></span>
+	<span class="post-count">1.7k字</span>
+  </span>
+</span>
+
+        
+    
+    
+
+
+ 
+
+
+    </div>
+</div>
+
+
+    <aside class="post-side">
+        <div class="post-side__toc">
+            <div class="toc-title">文章目录</div>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%9B%B8%E5%85%B3%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-text">数据结构相关的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-text">算法的相关概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E7%AE%97%E6%B3%95%E6%95%88%E7%8E%87%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-text">关于算法效率的函数</span></a></li></ol>
+        </div>
+    </aside>
+    <a class="btn-toc button" id="btn-toc" tabindex="0">
+        <svg viewBox="0 0 1024 1024" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M128 256h64V192H128zM320 256h576V192H320zM128 544h64v-64H128zM320 544h576v-64H320zM128 832h64v-64H128zM320 832h576v-64H320z" fill="currentColor"></path>
+        </svg>
+    </a>
+    <div class="toc-menus" id="toc-menus">
+        <div class="toc-title">文章目录</div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%9B%B8%E5%85%B3%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-text">数据结构相关的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-text">算法的相关概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E7%AE%97%E6%B3%95%E6%95%88%E7%8E%87%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-text">关于算法效率的函数</span></a></li></ol>
+    </div>
+
+
+<article class="post post__with-toc content-card">
+    <div class="post__header">
+    
+        <div class="post-thumbnail lazy" data-bg="https://cdn.jsdelivr.net/gh/wnut/imgbed/img/data_structure.jpg"></div>
+    
+
+    <div class="post__expire" id="post-expired-notify">
+        <p>
+            本文最后更新于 &lt;span id=&#34;expire-date&#34;&gt;&lt;/span&gt; 天前，文中部分描述可能已经过时。
+        </p>
+    </div>
+    <script>
+        (() => {
+            var update = Date.parse("2021-12-23"),
+                date = new Date(),
+                now = date.getTime(),
+                expire = now - update,
+                expire_days = Math.floor(expire/(24*3600*1000));
+            if (expire_days >= 120) {
+                document.querySelectorAll('#expire-date')[0].innerHTML = expire_days;
+                document.querySelectorAll('#post-expired-notify')[0].style.display = 'block';
+            }
+        })();
+    </script>
+</div>
+    <div class="post__content">
+        <h2 id="数据结构相关的概念"><a href="#数据结构相关的概念" class="headerlink" title="数据结构相关的概念"></a>数据结构相关的概念</h2><p><strong>数据的概念：</strong></p>
+<ul>
+<li>**数据(Data)**是信息的载体，在计算机中指所有能输入到计算机中并能被计算机程序识别、存储、处理的符号集合。例如实数、字符串、图像、音频等。</li>
+<li>**数据元素(Data Element)**是数据基本单位，也称元素(Element)、结点(Node)、顶点(Vertex)、记录(Record)，在计算机程序中常作为一个整体进行考虑和处埋。一个数据元素可以是不可分割的原子，称为原子项；也可以由若干个数据项组成,称为组合项。数据项是数据不可分割的最小单位。例如，包括书名、作者名、分类号、出版单位及出版时间等的一条书目信息在计算机图书管理程序中作为一个数据元素，而书名、分类号等称作数据项。</li>
+<li>**数据对象(Data Object)**是性质相同的数据元素的集合，是数据的一个子集。</li>
+<li>**数据关系(Data Relation)**反映了数据对象中数据元素所固有的一种结构。在数据处理领域，通常把数据之间的这种固有关系简单地用前驱和后继来描述。例如，一张按照名次排列的成绩表，数据对象是全班同学，对某个同学属性(姓名、成绩等)的描述就是一个数据元素，各元素之间有名词关系，比如第二名是第三名的前驱，第四名是第三名的后继。</li>
+</ul>
+<p><strong>结构的概念：</strong></p>
+<ul>
+<li><p>**数据结构(Data Structure)**是相互之间存在一种或多种特定关系的数据元素的集合。在任何问题中，数据元素都不是孤立存在的，而是在它们之间存在着某种关系，这种数据元素相互之间的关系称为结构。</p>
+</li>
+<li><p>内容包括数据的<strong>逻辑结构</strong>和数据的<strong>物理(存储)结构</strong></p>
+<ul>
+<li><p>**逻辑结构(Logical Structure)**是对操作对象的一种数学描述，是从操作系统中抽象出来的数学模型。</p>
+<ul>
+<li>集合(Set)</li>
+<li>线性结构(Linear Structure)</li>
+<li>树状结构(Tree Structure)</li>
+<li>图状结构或网状结构(Graph or Net Structure)</li>
+</ul>
+<p>由于”集合”是数据元素之间关系极为松散的一种结构，是数据结构的一个特例，因此可以用其他结构来表示它。</p>
+</li>
+<li><p>**物理结构(Physical Structure)**又称为存储结构(Storage Structure)，是数据及其逻辑结构在计算机中的表示。</p>
+<ul>
+<li>顺序存储结构(Sequential Storage Structure)</li>
+<li>链式存储结构(Linked Storage Structure)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>类型的概念：</strong></p>
+<ul>
+<li><p>**数据类型(Data Type)**规定了在程序执行期间变量或表达式的取值范围以及在这些值上允许进行的操作。</p>
+</li>
+<li><p>**抽象数据类型(Abstract Data Type，ADT)**是指一个数据模型以及定义在该模型上的一组操作。抽象数据类型的定义仅取决于其逻辑特性，与计算机内部的表示和实现无关。</p>
+<p>抽象数据类型可以理解为对数据类型的进一步抽象，其区别在于：</p>
+<ul>
+<li>数据类型指的是高级程序语言已经实现的数据结构；而抽象数据类型的范畴更广，它不再局限于各处理器中定义的基本数据类型，还包括用户自定义的数据类型。</li>
+</ul>
+</li>
+</ul>
+<h2 id="算法的相关概念"><a href="#算法的相关概念" class="headerlink" title="算法的相关概念"></a>算法的相关概念</h2><p><strong>算法的概念:</strong></p>
+<p>算法(Algorithm)是对特定问题求解步骤的 一中描述，是为了解决一个或一类问题给出的一个确定的、有限长的操作序列。</p>
+<ul>
+<li>算法特性<ul>
+<li>有穷性(Limitedness)</li>
+<li>确定性(Definiteness)</li>
+<li>可行性(Feasibleness)</li>
+<li>有输入(Input)</li>
+<li>有输出(Output)</li>
+</ul>
+</li>
+</ul>
+<p><strong>算法分析：</strong></p>
+<p>一个问题可以用不同算法解决，而一个算法的质量优劣将影响到算法乃至程序的效率。算法分析的目的在于选择合适的算法和改进算法。</p>
+<ul>
+<li><p>算法所消耗的时间</p>
+<p>语句的执行次数成为语句频度(Frequency Count)。语句频度和语句执行一次所需的时间的乘积定义为每条语句的执行时间。算法中每条语句的执行时间之和即为一个算法所消耗的时间，记为T(n)，n为问题规模，即算法求解问题的输入量。</p>
+<p>示例，求两个n阶方阵的乘积<code>C=A*B</code>。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">n</span> <span class="token expression"><span class="token number">100</span></span></span>
+<span class="token keyword">void</span> <span class="token function">MatrixMultiply</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token keyword">int</span> b<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token keyword">int</span> c<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>                        <span class="token comment">/* 频度f(n)=n+1 */</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>                    <span class="token comment">/* 频度f(n)=n(n+1) */</span>
+        <span class="token punctuation">&#123;</span>   
+            c<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>                            <span class="token comment">/* 频度f(n)=n^2 */</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span> k <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> k <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> k<span class="token operator">++</span><span class="token punctuation">)</span>                <span class="token comment">/* 频度f(n)=n^2(n+1) */</span>
+            <span class="token punctuation">&#123;</span>
+                c<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">+=</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">*</span> b<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">;</span>       <span class="token comment">/* 频度f(n)=n^3 */</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>  
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>该算法所消耗的时间为所有语句频度之和：<code>T(n)=2n^3+3n^2^+2n+1</code> </p>
+</li>
+<li><p><strong>算法的时间复杂度</strong></p>
+<p>一般情况下，一个算法所耗费的时间T(n)是算法所求解问题规模n的某个函数f(n)，算法的时间度量记作<code>T(n)=O[f(n)]</code>，这表示随着问题规模n的增大，算法执行时间的增长率和f(n)的增长率相同，即当问题规模n趋向无穷大时，T(n)的数量级成为算法的渐进复杂度，简称为**时间复杂度(Time Complexity)**。</p>
+<p>上述示例的时间复杂度为 <code>T(n)=O(n^3)</code></p>
+<p>数学符号**”O”**的定义：如果T(n)和f(n)是定义在正整数集合上的两个函数，则<code>T(n)=O(f(n))</code>表示存在正的常数C和n<del>0</del>，使得当n≥n<del>0</del>时，都满足<code>0≤T(n)≤C*f(n)</code>。”O”用来描述增长率的上限，即当输入的问题规模为n时，算法所耗费的时间的最大值。</p>
+</li>
+<li><p><strong>算法的空间复杂度</strong></p>
+<p>算法的**空间复杂度(Space Complexity)**定义为算法所耗费的存储空间S(n)，记作<code>S(n)=O[f(n]</code>，其中n为问题规模。</p>
+</li>
+</ul>
+<h2 id="关于算法效率的函数"><a href="#关于算法效率的函数" class="headerlink" title="关于算法效率的函数"></a>关于算法效率的函数</h2><p><strong>clock()函数</strong></p>
+<ul>
+<li><p>返回程序执行起（一般为程序的开头），处理器时钟所使用的时间。为了获取 CPU 所使用的秒数，需要除以 CLOCKS_PER_SEC，值为1000。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token class-name">clock_t</span> <span class="token function">clock</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>实例：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;time.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+
+<span class="token class-name">clock_t</span> <span class="token class-name">start_t</span><span class="token punctuation">,</span> <span class="token class-name">end_t</span><span class="token punctuation">;</span>        		 	<span class="token comment">/* clock_t是clock()函数返回的变量类型 */</span>
+<span class="token keyword">double</span> <span class="token class-name">duration_t</span><span class="token punctuation">;</span>              		<span class="token comment">/* 记录cpu运行时间，以秒为单位 */</span>
+<span class="token keyword">int</span> sum<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">start_t</span> <span class="token operator">=</span> <span class="token function">clock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>          		<span class="token comment">/* 开始计时 */</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"start_t = %ld\n"</span><span class="token punctuation">,</span> <span class="token class-name">start_t</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 被测函数 */</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100000000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> 
+    <span class="token punctuation">&#123;</span>
+        sum <span class="token operator">+=</span> i<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token class-name">end_t</span> <span class="token operator">=</span> <span class="token function">clock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>           			<span class="token comment">/* 结束计时 */</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"end_t = %ld\n"</span><span class="token punctuation">,</span> <span class="token class-name">end_t</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 计算运行时间 */</span>
+    <span class="token class-name">duration_t</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">double</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token class-name">end_t</span> <span class="token operator">-</span> <span class="token class-name">start_t</span><span class="token punctuation">)</span> <span class="token operator">/</span> CLOCKS_PER_SEC<span class="token punctuation">;</span> 
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"CPU占用的总时间：%f\n"</span><span class="token punctuation">,</span> <span class="token class-name">duration_t</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>Walnut
+        </p>
+        <p>
+            <strong>
+                本文链接：
+            </strong>
+            <a href="https://blog.wnut.cc/2021/12/23/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%8401-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/">https://blog.wnut.cc/2021/12/23/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%8401-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新于 2021-12-23</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tags__link button">数据结构</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/12/21/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%8010-%E6%96%87%E4%BB%B6/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            C语言程序设计基础10-文件
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">Walnutの博客</a>
+        </p>
+    
+    
+        
+            <p>欢迎来到Walnut的博客(´▽`ʃ♡ƪ)</p>
+
+        
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/DioPong/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+        
+    <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+    <script>
+        window.lazyLoadOptions = {
+            elements_selector: ".lazy",
+            threshold: 0
+        };
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>
